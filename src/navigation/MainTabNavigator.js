@@ -1,7 +1,8 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import NotImplementedScreen from '../screens/NotImplementedScreen';
-import ChatsScreen from '../screens/ChatsScreen';
-import { Ionicons, Entypo } from '@expo/vector-icons';
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import NotImplementedScreen from "../screens/NotImplementedScreen";
+import ChatsScreen from "../screens/ChatsScreen";
+import { Ionicons, Entypo } from "@expo/vector-icons";
+import SettingsScreen from "../screens/SettingsScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -10,8 +11,8 @@ const MainTabNavigator = () => {
     <Tab.Navigator
       initialRouteName="Chats"
       screenOptions={{
-        tabBarStyle: { backgroundColor: 'whitesmoke' },
-        headerStyle: { backgroundColor: 'whitesmoke' },
+        tabBarStyle: { backgroundColor: "whitesmoke" },
+        headerStyle: { backgroundColor: "whitesmoke" },
       }}
     >
       <Tab.Screen
@@ -49,13 +50,18 @@ const MainTabNavigator = () => {
             <Ionicons name="ios-chatbubbles-sharp" size={size} color={color} />
           ),
           headerRight: () => (
-            <Entypo name="new-message" size={18} color={'royalblue'} style={{ marginRight: 15 }} />
+            <Entypo
+              name="new-message"
+              size={18}
+              color={"royalblue"}
+              style={{ marginRight: 15 }}
+            />
           ),
         }}
       />
       <Tab.Screen
         name="Settings"
-        component={NotImplementedScreen}
+        component={SettingsScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="settings-outline" size={size} color={color} />

@@ -1,0 +1,20 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-soulmate-staging-91912-authRole",
+      "UnauthRoleArn": "arn:aws:iam::844868927824:role/amplify-soulmate-staging-91912-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::844868927824:role/amplify-soulmate-staging-91912-authRole",
+      "Region": "ap-northeast-2",
+      "DeploymentBucketName": "amplify-soulmate-staging-91912-deployment",
+      "UnauthRoleName": "amplify-soulmate-staging-91912-unauthRole",
+      "StackName": "amplify-soulmate-staging-91912",
+      "StackId": "arn:aws:cloudformation:ap-northeast-2:844868927824:stack/amplify-soulmate-staging-91912/9dcaef50-c3db-11ed-b226-065665acc19e",
+      "AmplifyAppId": "d2tad1qo81mqxz"
+    },
+    "categories": {
+      "auth": {
+        "soulmate": {}
+      }
+    }
+  }
+}
