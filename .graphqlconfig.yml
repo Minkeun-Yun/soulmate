@@ -1,0 +1,15 @@
+projects:
+  soulmate:
+    schemaPath: amplify/backend/api/soulmate/build/schema.graphql
+    includes:
+      - src/graphql/**/*.js
+    excludes:
+      - ./amplify/**
+    extensions:
+      amplify:
+        codeGenTarget: javascript
+        generatedFileName: ''
+        docsFilePath: src/graphql
+        region: ap-northeast-2
+        apiId: null
+        maxDepth: 3
