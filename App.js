@@ -11,34 +11,74 @@ import { createUser, updateUser, deleteUser } from "./src/graphql/mutations";
 Amplify.configure({ ...awsconfig, Analytics: { disabled: true } });
 
 function App() {
+  let today = new Date();
+
+  console.log(
+    "*******************************",
+    today.getFullYear(),
+    "/",
+    today.getMonth(),
+    "/",
+    today.getDate(),
+    "||",
+    today.getHours(),
+    ":",
+    today.getMinutes(),
+    ":",
+    today.getSeconds()
+  );
+
   useEffect(() => {
     const syncUser = async () => {
       //get Auth user
       const authUser = await Auth.currentAuthenticatedUser({
         bypassCache: true,
       });
-      console.log(authUser);
+      console.log("authUser : ", authUser);
 
       //query the database using Auth user id(sub)
-      const userData = await API.graphql(
-        graphqlOperation(getUser, { id: authUser.attributes.sub })
-      );
+      const userData = await API.graphql(graphqlOperation(getUser, { id: 2 }));
 
-      console.log(userData);
+      console.log("userData : ", userData);
 
-      const aaaaa = await API.graphql(
-        graphqlOperation(deleteUser, { input: { id: authUser.attributes.sub } })
+      // const deleteTemp = {
+      //   id: 3,
+      //   _version: userData.data.getUser._version,
+      // };
+
+      // const deleteTempResponse = await API.graphql(
+      //   graphqlOperation(deleteUser, {
+      //     input: deleteTemp,
+      //   })
+      // );
+      // console.log("delete : ", deleteTempResponse);
+
+      const tempHeartToArray = [...userData.data.getUser.heartto, 123];
+      const tempHeartFromArray = [...userData.data.getUser.heartfrom, 321];
+
+      const updateTemp = {
+        id: 2,
+        _version: userData.data.getUser._version,
+        age: 1,
+        heartto: tempHeartToArray,
+        heartfrom: tempHeartFromArray,
+      };
+
+      const updateTempResponse = await API.graphql(
+        graphqlOperation(updateUser, {
+          input: updateTemp,
+        })
       );
-      console.log(aaaaa);
+      console.log("update : ", updateTempResponse);
 
       if (userData.data.getUser) {
         console.log("user already exists in DB");
         return;
       }
-      //if there is no users in db, create one
 
+      //if there is no users in db, create one
       const newUser = {
-        id: authUser.attributes.sub,
+        id: 2,
         name: authUser.attributes.email,
         status: "moooooo yo!",
       };
@@ -47,6 +87,11 @@ function App() {
       );
     };
     syncUser();
+  }, []);
+
+  useEffect(() => {
+    const syncRecommend = async () => {};
+    syncRecommend();
   }, []);
 
   return (

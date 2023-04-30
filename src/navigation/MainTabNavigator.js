@@ -1,6 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import NotImplementedScreen from "../screens/NotImplementedScreen";
 import ChatsScreen from "../screens/ChatsScreen";
+import StatusScreen from "../screens/StatusScreen";
 import { Ionicons, Entypo } from "@expo/vector-icons";
 import SettingsScreen from "../screens/SettingsScreen";
 
@@ -9,7 +10,7 @@ const Tab = createBottomTabNavigator();
 const MainTabNavigator = () => {
   return (
     <Tab.Navigator
-      initialRouteName="Chats"
+      initialRouteName="Status"
       screenOptions={{
         tabBarStyle: { backgroundColor: "whitesmoke" },
         headerStyle: { backgroundColor: "whitesmoke" },
@@ -17,7 +18,7 @@ const MainTabNavigator = () => {
     >
       <Tab.Screen
         name="Status"
-        component={NotImplementedScreen}
+        component={StatusScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="logo-whatsapp" size={size} color={color} />

@@ -1,10 +1,72 @@
 import { ModelInit, MutableModel, __modelMeta__, ManagedIdentifier } from "@aws-amplify/datastore";
 // @ts-ignore
-import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from "@aws-amplify/datastore";
+import { LazyLoading, LazyLoadingDisabled, AsyncItem, AsyncCollection } from "@aws-amplify/datastore";
 
 
 
 
+
+type EagerReplyYes = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<ReplyYes, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly User?: User | null;
+  readonly recommendID: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly replyYesUserId?: string | null;
+}
+
+type LazyReplyYes = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<ReplyYes, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly User: AsyncItem<User | undefined>;
+  readonly recommendID: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly replyYesUserId?: string | null;
+}
+
+export declare type ReplyYes = LazyLoading extends LazyLoadingDisabled ? EagerReplyYes : LazyReplyYes
+
+export declare const ReplyYes: (new (init: ModelInit<ReplyYes>) => ReplyYes) & {
+  copyOf(source: ReplyYes, mutator: (draft: MutableModel<ReplyYes>) => MutableModel<ReplyYes> | void): ReplyYes;
+}
+
+type EagerRecommend = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Recommend, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly Users?: (User | null)[] | null;
+  readonly ReplyYes?: (ReplyYes | null)[] | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyRecommend = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Recommend, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly Users: AsyncCollection<User>;
+  readonly ReplyYes: AsyncCollection<ReplyYes>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type Recommend = LazyLoading extends LazyLoadingDisabled ? EagerRecommend : LazyRecommend
+
+export declare const Recommend: (new (init: ModelInit<Recommend>) => Recommend) & {
+  copyOf(source: Recommend, mutator: (draft: MutableModel<Recommend>) => MutableModel<Recommend> | void): Recommend;
+}
 
 type EagerChatRoom = {
   readonly [__modelMeta__]: {
@@ -86,6 +148,7 @@ type EagerUser = {
   readonly heartfrom?: (string | null)[] | null;
   readonly Messages?: (Message | null)[] | null;
   readonly ChatRooms?: (UserChatRoom | null)[] | null;
+  readonly recommendID: string;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -104,6 +167,7 @@ type LazyUser = {
   readonly heartfrom?: (string | null)[] | null;
   readonly Messages: AsyncCollection<Message>;
   readonly ChatRooms: AsyncCollection<UserChatRoom>;
+  readonly recommendID: string;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

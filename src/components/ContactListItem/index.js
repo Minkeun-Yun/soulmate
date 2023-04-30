@@ -16,9 +16,16 @@ const ContactListItem = ({ user }) => {
         <Text style={styles.name} numberOfLines={1}>
           {user.name}
         </Text>
+        <Text style={styles.name} numberOfLines={1}>
+          [deleted? : {user._deleted ? "True" : "False"}]
+        </Text>
 
         <Text numberOfLines={2} style={styles.subTitle}>
           {user.status}
+        </Text>
+
+        <Text style={styles.name} numberOfLines={1}>
+          {user.updatedAt}, age : {user.age}
         </Text>
       </View>
     </Pressable>
