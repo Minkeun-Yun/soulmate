@@ -10,23 +10,12 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "User": {
-                    "name": "User",
+                "userID": {
+                    "name": "userID",
                     "isArray": false,
-                    "type": {
-                        "model": "User"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "HAS_ONE",
-                        "associatedWith": [
-                            "id"
-                        ],
-                        "targetNames": [
-                            "replyYesUserId"
-                        ]
-                    }
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
                 },
                 "recommendID": {
                     "name": "recommendID",
@@ -50,13 +39,6 @@ export const schema = {
                     "isRequired": false,
                     "attributes": [],
                     "isReadOnly": true
-                },
-                "replyYesUserId": {
-                    "name": "replyYesUserId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": false,
-                    "attributes": []
                 }
             },
             "syncable": true,
@@ -65,6 +47,15 @@ export const schema = {
                 {
                     "type": "model",
                     "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byUser",
+                        "fields": [
+                            "userID"
+                        ]
+                    }
                 },
                 {
                     "type": "key",
@@ -103,11 +94,11 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "Users": {
-                    "name": "Users",
+                "users": {
+                    "name": "users",
                     "isArray": true,
                     "type": {
-                        "model": "User"
+                        "model": "UserRecommend"
                     },
                     "isRequired": false,
                     "attributes": [],
@@ -115,7 +106,7 @@ export const schema = {
                     "association": {
                         "connectionType": "HAS_MANY",
                         "associatedWith": [
-                            "recommendID"
+                            "recommend"
                         ]
                     }
                 },
@@ -463,12 +454,37 @@ export const schema = {
                         ]
                     }
                 },
-                "recommendID": {
-                    "name": "recommendID",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
+                "Recommends": {
+                    "name": "Recommends",
+                    "isArray": true,
+                    "type": {
+                        "model": "UserRecommend"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": [
+                            "user"
+                        ]
+                    }
+                },
+                "ReplyYes": {
+                    "name": "ReplyYes",
+                    "isArray": true,
+                    "type": {
+                        "model": "ReplyYes"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": [
+                            "userID"
+                        ]
+                    }
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -495,15 +511,6 @@ export const schema = {
                     "properties": {}
                 },
                 {
-                    "type": "key",
-                    "properties": {
-                        "name": "byRecommend",
-                        "fields": [
-                            "recommendID"
-                        ]
-                    }
-                },
-                {
                     "type": "auth",
                     "properties": {
                         "rules": [
@@ -516,6 +523,104 @@ export const schema = {
                                     "read"
                                 ]
                             }
+                        ]
+                    }
+                }
+            ]
+        },
+        "UserRecommend": {
+            "name": "UserRecommend",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "recommendId": {
+                    "name": "recommendId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "userId": {
+                    "name": "userId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "recommend": {
+                    "name": "recommend",
+                    "isArray": false,
+                    "type": {
+                        "model": "Recommend"
+                    },
+                    "isRequired": true,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "BELONGS_TO",
+                        "targetNames": [
+                            "recommendId"
+                        ]
+                    }
+                },
+                "user": {
+                    "name": "user",
+                    "isArray": false,
+                    "type": {
+                        "model": "User"
+                    },
+                    "isRequired": true,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "BELONGS_TO",
+                        "targetNames": [
+                            "userId"
+                        ]
+                    }
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "UserRecommends",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byRecommend",
+                        "fields": [
+                            "recommendId"
+                        ]
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byUser",
+                        "fields": [
+                            "userId"
                         ]
                     }
                 }
@@ -623,5 +728,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.3.6",
-    "version": "e9488bbf6f528e91ca2183c16952887b"
+    "version": "c51e420af25869b82c18065644b0a1ea"
 };

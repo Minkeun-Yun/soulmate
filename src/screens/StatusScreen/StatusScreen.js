@@ -1,20 +1,36 @@
 import { useState, useEffect } from "react";
 import { Text } from "react-native";
 import { FlatList } from "react-native";
-import chats from "../../assets/data/chats.json";
-import RecommendItem from "../components/RecommendItem";
-import { API, graphqlOperation } from "aws-amplify";
-import { listRecommends } from "../graphql/queries";
+// import chats from "../../../assets/data/chats.json";
+import RecommendItem from "../../components/RecommendItem";
+import { API, graphqlOperation, Auth } from "aws-amplify";
+// import { listRecommends } from "../../graphql/queries";
+import { listRecommends } from "./queries";
 
 const StatusScreen = () => {
   const [recommends, setRecommends] = useState([]);
+  useEffect(() => {
+    const fetchRecommends = async () => {
+      const authUser = await Auth.currentAuthenticatedUser();
+      const response = await API.graphql(
+        graphqlOperation(listRecommends, { id: authUser.attributes.sub })
+      );
+
+      console.log("BB : ", response.data.getUser.Recommends.items);
+      setRecommends(response.data.getUser.Recommends.items);
+      // response.data.getUser.Recommends.items[0].recommend.users.items
+    };
+    fetchRecommends();
+  }, []);
 
   // useEffect(() => {
   //   API.graphql(graphqlOperation(listRecommends)).then((result) => {
   //     // const filtered = result.data?.listUsers?.items.filter(
   //     //   (one) => !one._deleted
   //     // );
-  //     setRecommends(filtered);
+  //     console.log("-----Status Screen on-----");
+  //     console.log("recommend : :", result.data.listRecommends.items);
+  //     // setRecommends(result.data?.listRecommends?.items);
 
   //     // result.data?.listUsers?.items.forEach((element) => {
   //     //   if (element._deleted) {
@@ -42,17 +58,17 @@ const StatusScreen = () => {
   //     // });
 
   //     // setRecommends(result.data?.listUsers?.items);
-  //     console.log("recommends : ", recommends);
+  //     // console.log("recommends : ", recommends);
   //   });
   // }, []);
 
   return (
-    // <FlatList
-    //   data={chats}
-    //   renderItem={({ item }) => <RecommendItem chat={item} />}
-    //   style={{ backgroundColor: "white" }}
-    // />
-    <Text numberOfLines={1}>aasdfsdfsdf</Text>
+    <FlatList
+      data={recommends}
+      renderItem={({ item }) => <RecommendItem recommend={item.recommend} />}
+      style={{ backgroundColor: "white" }}
+    />
+    // <Text>sdf</Text>
   );
 };
 

@@ -1,6 +1,6 @@
 import { ModelInit, MutableModel, __modelMeta__, ManagedIdentifier } from "@aws-amplify/datastore";
 // @ts-ignore
-import { LazyLoading, LazyLoadingDisabled, AsyncItem, AsyncCollection } from "@aws-amplify/datastore";
+import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from "@aws-amplify/datastore";
 
 
 
@@ -12,11 +12,10 @@ type EagerReplyYes = {
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly User?: User | null;
+  readonly userID: string;
   readonly recommendID: string;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-  readonly replyYesUserId?: string | null;
 }
 
 type LazyReplyYes = {
@@ -25,11 +24,10 @@ type LazyReplyYes = {
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly User: AsyncItem<User | undefined>;
+  readonly userID: string;
   readonly recommendID: string;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-  readonly replyYesUserId?: string | null;
 }
 
 export declare type ReplyYes = LazyLoading extends LazyLoadingDisabled ? EagerReplyYes : LazyReplyYes
@@ -44,7 +42,7 @@ type EagerRecommend = {
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly Users?: (User | null)[] | null;
+  readonly users?: (UserRecommend | null)[] | null;
   readonly ReplyYes?: (ReplyYes | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
@@ -56,7 +54,7 @@ type LazyRecommend = {
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly Users: AsyncCollection<User>;
+  readonly users: AsyncCollection<UserRecommend>;
   readonly ReplyYes: AsyncCollection<ReplyYes>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
@@ -148,7 +146,8 @@ type EagerUser = {
   readonly heartfrom?: (string | null)[] | null;
   readonly Messages?: (Message | null)[] | null;
   readonly ChatRooms?: (UserChatRoom | null)[] | null;
-  readonly recommendID: string;
+  readonly Recommends?: (UserRecommend | null)[] | null;
+  readonly ReplyYes?: (ReplyYes | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -167,7 +166,8 @@ type LazyUser = {
   readonly heartfrom?: (string | null)[] | null;
   readonly Messages: AsyncCollection<Message>;
   readonly ChatRooms: AsyncCollection<UserChatRoom>;
-  readonly recommendID: string;
+  readonly Recommends: AsyncCollection<UserRecommend>;
+  readonly ReplyYes: AsyncCollection<ReplyYes>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -176,6 +176,40 @@ export declare type User = LazyLoading extends LazyLoadingDisabled ? EagerUser :
 
 export declare const User: (new (init: ModelInit<User>) => User) & {
   copyOf(source: User, mutator: (draft: MutableModel<User>) => MutableModel<User> | void): User;
+}
+
+type EagerUserRecommend = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<UserRecommend, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly recommendId?: string | null;
+  readonly userId?: string | null;
+  readonly recommend: Recommend;
+  readonly user: User;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyUserRecommend = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<UserRecommend, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly recommendId?: string | null;
+  readonly userId?: string | null;
+  readonly recommend: AsyncItem<Recommend>;
+  readonly user: AsyncItem<User>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type UserRecommend = LazyLoading extends LazyLoadingDisabled ? EagerUserRecommend : LazyUserRecommend
+
+export declare const UserRecommend: (new (init: ModelInit<UserRecommend>) => UserRecommend) & {
+  copyOf(source: UserRecommend, mutator: (draft: MutableModel<UserRecommend>) => MutableModel<UserRecommend> | void): UserRecommend;
 }
 
 type EagerUserChatRoom = {

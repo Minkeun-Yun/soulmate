@@ -1,6 +1,174 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onCreateReplyYes = /* GraphQL */ `
+  subscription OnCreateReplyYes($filter: ModelSubscriptionReplyYesFilterInput) {
+    onCreateReplyYes(filter: $filter) {
+      id
+      userID
+      recommendID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onUpdateReplyYes = /* GraphQL */ `
+  subscription OnUpdateReplyYes($filter: ModelSubscriptionReplyYesFilterInput) {
+    onUpdateReplyYes(filter: $filter) {
+      id
+      userID
+      recommendID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onDeleteReplyYes = /* GraphQL */ `
+  subscription OnDeleteReplyYes($filter: ModelSubscriptionReplyYesFilterInput) {
+    onDeleteReplyYes(filter: $filter) {
+      id
+      userID
+      recommendID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onCreateRecommend = /* GraphQL */ `
+  subscription OnCreateRecommend(
+    $filter: ModelSubscriptionRecommendFilterInput
+  ) {
+    onCreateRecommend(filter: $filter) {
+      id
+      users {
+        items {
+          id
+          recommendId
+          userId
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      ReplyYes {
+        items {
+          id
+          userID
+          recommendID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onUpdateRecommend = /* GraphQL */ `
+  subscription OnUpdateRecommend(
+    $filter: ModelSubscriptionRecommendFilterInput
+  ) {
+    onUpdateRecommend(filter: $filter) {
+      id
+      users {
+        items {
+          id
+          recommendId
+          userId
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      ReplyYes {
+        items {
+          id
+          userID
+          recommendID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onDeleteRecommend = /* GraphQL */ `
+  subscription OnDeleteRecommend(
+    $filter: ModelSubscriptionRecommendFilterInput
+  ) {
+    onDeleteRecommend(filter: $filter) {
+      id
+      users {
+        items {
+          id
+          recommendId
+          userId
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      ReplyYes {
+        items {
+          id
+          userID
+          recommendID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
 export const onCreateChatRoom = /* GraphQL */ `
   subscription OnCreateChatRoom($filter: ModelSubscriptionChatRoomFilterInput) {
     onCreateChatRoom(filter: $filter) {
@@ -244,6 +412,34 @@ export const onCreateUser = /* GraphQL */ `
         nextToken
         startedAt
       }
+      Recommends {
+        items {
+          id
+          recommendId
+          userId
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      ReplyYes {
+        items {
+          id
+          userID
+          recommendID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
       createdAt
       updatedAt
       _version
@@ -282,6 +478,34 @@ export const onUpdateUser = /* GraphQL */ `
           id
           chatRoomId
           userId
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      Recommends {
+        items {
+          id
+          recommendId
+          userId
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      ReplyYes {
+        items {
+          id
+          userID
+          recommendID
           createdAt
           updatedAt
           _version
@@ -337,6 +561,220 @@ export const onDeleteUser = /* GraphQL */ `
         }
         nextToken
         startedAt
+      }
+      Recommends {
+        items {
+          id
+          recommendId
+          userId
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      ReplyYes {
+        items {
+          id
+          userID
+          recommendID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onCreateUserRecommend = /* GraphQL */ `
+  subscription OnCreateUserRecommend(
+    $filter: ModelSubscriptionUserRecommendFilterInput
+  ) {
+    onCreateUserRecommend(filter: $filter) {
+      id
+      recommendId
+      userId
+      recommend {
+        id
+        users {
+          nextToken
+          startedAt
+        }
+        ReplyYes {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      user {
+        id
+        name
+        status
+        image
+        age
+        heartto
+        heartfrom
+        Messages {
+          nextToken
+          startedAt
+        }
+        ChatRooms {
+          nextToken
+          startedAt
+        }
+        Recommends {
+          nextToken
+          startedAt
+        }
+        ReplyYes {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onUpdateUserRecommend = /* GraphQL */ `
+  subscription OnUpdateUserRecommend(
+    $filter: ModelSubscriptionUserRecommendFilterInput
+  ) {
+    onUpdateUserRecommend(filter: $filter) {
+      id
+      recommendId
+      userId
+      recommend {
+        id
+        users {
+          nextToken
+          startedAt
+        }
+        ReplyYes {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      user {
+        id
+        name
+        status
+        image
+        age
+        heartto
+        heartfrom
+        Messages {
+          nextToken
+          startedAt
+        }
+        ChatRooms {
+          nextToken
+          startedAt
+        }
+        Recommends {
+          nextToken
+          startedAt
+        }
+        ReplyYes {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onDeleteUserRecommend = /* GraphQL */ `
+  subscription OnDeleteUserRecommend(
+    $filter: ModelSubscriptionUserRecommendFilterInput
+  ) {
+    onDeleteUserRecommend(filter: $filter) {
+      id
+      recommendId
+      userId
+      recommend {
+        id
+        users {
+          nextToken
+          startedAt
+        }
+        ReplyYes {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      user {
+        id
+        name
+        status
+        image
+        age
+        heartto
+        heartfrom
+        Messages {
+          nextToken
+          startedAt
+        }
+        ChatRooms {
+          nextToken
+          startedAt
+        }
+        Recommends {
+          nextToken
+          startedAt
+        }
+        ReplyYes {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       createdAt
       updatedAt
@@ -395,6 +833,14 @@ export const onCreateUserChatRoom = /* GraphQL */ `
           startedAt
         }
         ChatRooms {
+          nextToken
+          startedAt
+        }
+        Recommends {
+          nextToken
+          startedAt
+        }
+        ReplyYes {
           nextToken
           startedAt
         }
@@ -464,6 +910,14 @@ export const onUpdateUserChatRoom = /* GraphQL */ `
           nextToken
           startedAt
         }
+        Recommends {
+          nextToken
+          startedAt
+        }
+        ReplyYes {
+          nextToken
+          startedAt
+        }
         createdAt
         updatedAt
         _version
@@ -527,6 +981,14 @@ export const onDeleteUserChatRoom = /* GraphQL */ `
           startedAt
         }
         ChatRooms {
+          nextToken
+          startedAt
+        }
+        Recommends {
+          nextToken
+          startedAt
+        }
+        ReplyYes {
           nextToken
           startedAt
         }

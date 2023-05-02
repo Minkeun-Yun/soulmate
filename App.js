@@ -34,10 +34,12 @@ function App() {
       const authUser = await Auth.currentAuthenticatedUser({
         bypassCache: true,
       });
-      console.log("authUser : ", authUser);
+      // console.log("authUser : ", authUser);
 
       //query the database using Auth user id(sub)
-      const userData = await API.graphql(graphqlOperation(getUser, { id: 2 }));
+      const userData = await API.graphql(
+        graphqlOperation(getUser, { id: authUser.attributes.sub })
+      );
 
       console.log("userData : ", userData);
 
@@ -53,23 +55,24 @@ function App() {
       // );
       // console.log("delete : ", deleteTempResponse);
 
-      const tempHeartToArray = [...userData.data.getUser.heartto, 123];
-      const tempHeartFromArray = [...userData.data.getUser.heartfrom, 321];
+      //** UPDATE TEST */
 
-      const updateTemp = {
-        id: 2,
-        _version: userData.data.getUser._version,
-        age: 1,
-        heartto: tempHeartToArray,
-        heartfrom: tempHeartFromArray,
-      };
+      // const tempHeartToArray = [...userData.data.getUser.heartto, 123];
+      // const tempHeartFromArray = [...userData.data.getUser.heartfrom, 321];
 
-      const updateTempResponse = await API.graphql(
-        graphqlOperation(updateUser, {
-          input: updateTemp,
-        })
-      );
-      console.log("update : ", updateTempResponse);
+      // const updateTemp = {
+      //   id: authUser.attributes.sub,
+      //   _version: userData.data.getUser._version,
+      //   heartto: tempHeartToArray,
+      //   heartfrom: tempHeartFromArray,
+      // };
+
+      // const updateTempResponse = await API.graphql(
+      //   graphqlOperation(updateUser, {
+      //     input: updateTemp,
+      //   })
+      // );
+      // console.log("update : ", updateTempResponse);
 
       if (userData.data.getUser) {
         console.log("user already exists in DB");
@@ -78,9 +81,9 @@ function App() {
 
       //if there is no users in db, create one
       const newUser = {
-        id: 2,
+        id: authUser.attributes.sub,
         name: authUser.attributes.email,
-        status: "moooooo yo!",
+        status: "im a new guy!!! ",
       };
       const newUserResponse = await API.graphql(
         graphqlOperation(createUser, { input: newUser })

@@ -1,6 +1,186 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const createReplyYes = /* GraphQL */ `
+  mutation CreateReplyYes(
+    $input: CreateReplyYesInput!
+    $condition: ModelReplyYesConditionInput
+  ) {
+    createReplyYes(input: $input, condition: $condition) {
+      id
+      userID
+      recommendID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateReplyYes = /* GraphQL */ `
+  mutation UpdateReplyYes(
+    $input: UpdateReplyYesInput!
+    $condition: ModelReplyYesConditionInput
+  ) {
+    updateReplyYes(input: $input, condition: $condition) {
+      id
+      userID
+      recommendID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteReplyYes = /* GraphQL */ `
+  mutation DeleteReplyYes(
+    $input: DeleteReplyYesInput!
+    $condition: ModelReplyYesConditionInput
+  ) {
+    deleteReplyYes(input: $input, condition: $condition) {
+      id
+      userID
+      recommendID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const createRecommend = /* GraphQL */ `
+  mutation CreateRecommend(
+    $input: CreateRecommendInput!
+    $condition: ModelRecommendConditionInput
+  ) {
+    createRecommend(input: $input, condition: $condition) {
+      id
+      users {
+        items {
+          id
+          recommendId
+          userId
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      ReplyYes {
+        items {
+          id
+          userID
+          recommendID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateRecommend = /* GraphQL */ `
+  mutation UpdateRecommend(
+    $input: UpdateRecommendInput!
+    $condition: ModelRecommendConditionInput
+  ) {
+    updateRecommend(input: $input, condition: $condition) {
+      id
+      users {
+        items {
+          id
+          recommendId
+          userId
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      ReplyYes {
+        items {
+          id
+          userID
+          recommendID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteRecommend = /* GraphQL */ `
+  mutation DeleteRecommend(
+    $input: DeleteRecommendInput!
+    $condition: ModelRecommendConditionInput
+  ) {
+    deleteRecommend(input: $input, condition: $condition) {
+      id
+      users {
+        items {
+          id
+          recommendId
+          userId
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      ReplyYes {
+        items {
+          id
+          userID
+          recommendID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
 export const createChatRoom = /* GraphQL */ `
   mutation CreateChatRoom(
     $input: CreateChatRoomInput!
@@ -265,6 +445,34 @@ export const createUser = /* GraphQL */ `
         nextToken
         startedAt
       }
+      Recommends {
+        items {
+          id
+          recommendId
+          userId
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      ReplyYes {
+        items {
+          id
+          userID
+          recommendID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
       createdAt
       updatedAt
       _version
@@ -306,6 +514,34 @@ export const updateUser = /* GraphQL */ `
           id
           chatRoomId
           userId
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      Recommends {
+        items {
+          id
+          recommendId
+          userId
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      ReplyYes {
+        items {
+          id
+          userID
+          recommendID
           createdAt
           updatedAt
           _version
@@ -365,6 +601,223 @@ export const deleteUser = /* GraphQL */ `
         nextToken
         startedAt
       }
+      Recommends {
+        items {
+          id
+          recommendId
+          userId
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      ReplyYes {
+        items {
+          id
+          userID
+          recommendID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const createUserRecommend = /* GraphQL */ `
+  mutation CreateUserRecommend(
+    $input: CreateUserRecommendInput!
+    $condition: ModelUserRecommendConditionInput
+  ) {
+    createUserRecommend(input: $input, condition: $condition) {
+      id
+      recommendId
+      userId
+      recommend {
+        id
+        users {
+          nextToken
+          startedAt
+        }
+        ReplyYes {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      user {
+        id
+        name
+        status
+        image
+        age
+        heartto
+        heartfrom
+        Messages {
+          nextToken
+          startedAt
+        }
+        ChatRooms {
+          nextToken
+          startedAt
+        }
+        Recommends {
+          nextToken
+          startedAt
+        }
+        ReplyYes {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateUserRecommend = /* GraphQL */ `
+  mutation UpdateUserRecommend(
+    $input: UpdateUserRecommendInput!
+    $condition: ModelUserRecommendConditionInput
+  ) {
+    updateUserRecommend(input: $input, condition: $condition) {
+      id
+      recommendId
+      userId
+      recommend {
+        id
+        users {
+          nextToken
+          startedAt
+        }
+        ReplyYes {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      user {
+        id
+        name
+        status
+        image
+        age
+        heartto
+        heartfrom
+        Messages {
+          nextToken
+          startedAt
+        }
+        ChatRooms {
+          nextToken
+          startedAt
+        }
+        Recommends {
+          nextToken
+          startedAt
+        }
+        ReplyYes {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteUserRecommend = /* GraphQL */ `
+  mutation DeleteUserRecommend(
+    $input: DeleteUserRecommendInput!
+    $condition: ModelUserRecommendConditionInput
+  ) {
+    deleteUserRecommend(input: $input, condition: $condition) {
+      id
+      recommendId
+      userId
+      recommend {
+        id
+        users {
+          nextToken
+          startedAt
+        }
+        ReplyYes {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      user {
+        id
+        name
+        status
+        image
+        age
+        heartto
+        heartfrom
+        Messages {
+          nextToken
+          startedAt
+        }
+        ChatRooms {
+          nextToken
+          startedAt
+        }
+        Recommends {
+          nextToken
+          startedAt
+        }
+        ReplyYes {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
       createdAt
       updatedAt
       _version
@@ -423,6 +876,14 @@ export const createUserChatRoom = /* GraphQL */ `
           startedAt
         }
         ChatRooms {
+          nextToken
+          startedAt
+        }
+        Recommends {
+          nextToken
+          startedAt
+        }
+        ReplyYes {
           nextToken
           startedAt
         }
@@ -493,6 +954,14 @@ export const updateUserChatRoom = /* GraphQL */ `
           nextToken
           startedAt
         }
+        Recommends {
+          nextToken
+          startedAt
+        }
+        ReplyYes {
+          nextToken
+          startedAt
+        }
         createdAt
         updatedAt
         _version
@@ -557,6 +1026,14 @@ export const deleteUserChatRoom = /* GraphQL */ `
           startedAt
         }
         ChatRooms {
+          nextToken
+          startedAt
+        }
+        Recommends {
+          nextToken
+          startedAt
+        }
+        ReplyYes {
           nextToken
           startedAt
         }

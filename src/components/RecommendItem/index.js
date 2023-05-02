@@ -6,12 +6,15 @@ import relativeTime from "dayjs/plugin/relativeTime";
 
 dayjs.extend(relativeTime);
 
-const ChatListItem = ({ chat }) => {
+const RecommendItem = ({ recommend }) => {
   // const navigation = useNavigation();
+  // console.log("aaa : ", recommend);
 
   return (
     <Pressable style={styles.container}>
-      <Text>sdf</Text>
+      <Text style={styles.name}>{recommend.updatedAt} </Text>
+      <Text style={styles.subTitle}>{recommend.users.items[0].user.name}</Text>
+      {/* recommend.users.items */}
     </Pressable>
   );
 };
@@ -48,4 +51,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ChatListItem;
+export default RecommendItem;

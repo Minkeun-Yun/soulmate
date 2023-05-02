@@ -1,6 +1,232 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const getReplyYes = /* GraphQL */ `
+  query GetReplyYes($id: ID!) {
+    getReplyYes(id: $id) {
+      id
+      userID
+      recommendID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const listReplyYes = /* GraphQL */ `
+  query ListReplyYes(
+    $filter: ModelReplyYesFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listReplyYes(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        userID
+        recommendID
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncReplyYes = /* GraphQL */ `
+  query SyncReplyYes(
+    $filter: ModelReplyYesFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncReplyYes(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        userID
+        recommendID
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const replyYesByUserID = /* GraphQL */ `
+  query ReplyYesByUserID(
+    $userID: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelReplyYesFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    replyYesByUserID(
+      userID: $userID
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        userID
+        recommendID
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const replyYesByRecommendID = /* GraphQL */ `
+  query ReplyYesByRecommendID(
+    $recommendID: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelReplyYesFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    replyYesByRecommendID(
+      recommendID: $recommendID
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        userID
+        recommendID
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const getRecommend = /* GraphQL */ `
+  query GetRecommend($id: ID!) {
+    getRecommend(id: $id) {
+      id
+      users {
+        items {
+          id
+          recommendId
+          userId
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      ReplyYes {
+        items {
+          id
+          userID
+          recommendID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const listRecommends = /* GraphQL */ `
+  query ListRecommends(
+    $filter: ModelRecommendFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listRecommends(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        users {
+          nextToken
+          startedAt
+        }
+        ReplyYes {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncRecommends = /* GraphQL */ `
+  query SyncRecommends(
+    $filter: ModelRecommendFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncRecommends(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        users {
+          nextToken
+          startedAt
+        }
+        ReplyYes {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
 export const getChatRoom = /* GraphQL */ `
   query GetChatRoom($id: ID!) {
     getChatRoom(id: $id) {
@@ -308,6 +534,34 @@ export const getUser = /* GraphQL */ `
         nextToken
         startedAt
       }
+      Recommends {
+        items {
+          id
+          recommendId
+          userId
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      ReplyYes {
+        items {
+          id
+          userID
+          recommendID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
       createdAt
       updatedAt
       _version
@@ -336,6 +590,14 @@ export const listUsers = /* GraphQL */ `
           startedAt
         }
         ChatRooms {
+          nextToken
+          startedAt
+        }
+        Recommends {
+          nextToken
+          startedAt
+        }
+        ReplyYes {
           nextToken
           startedAt
         }
@@ -378,6 +640,272 @@ export const syncUsers = /* GraphQL */ `
         ChatRooms {
           nextToken
           startedAt
+        }
+        Recommends {
+          nextToken
+          startedAt
+        }
+        ReplyYes {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const getUserRecommend = /* GraphQL */ `
+  query GetUserRecommend($id: ID!) {
+    getUserRecommend(id: $id) {
+      id
+      recommendId
+      userId
+      recommend {
+        id
+        users {
+          nextToken
+          startedAt
+        }
+        ReplyYes {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      user {
+        id
+        name
+        status
+        image
+        age
+        heartto
+        heartfrom
+        Messages {
+          nextToken
+          startedAt
+        }
+        ChatRooms {
+          nextToken
+          startedAt
+        }
+        Recommends {
+          nextToken
+          startedAt
+        }
+        ReplyYes {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const listUserRecommends = /* GraphQL */ `
+  query ListUserRecommends(
+    $filter: ModelUserRecommendFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listUserRecommends(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        recommendId
+        userId
+        recommend {
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        user {
+          id
+          name
+          status
+          image
+          age
+          heartto
+          heartfrom
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncUserRecommends = /* GraphQL */ `
+  query SyncUserRecommends(
+    $filter: ModelUserRecommendFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncUserRecommends(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        recommendId
+        userId
+        recommend {
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        user {
+          id
+          name
+          status
+          image
+          age
+          heartto
+          heartfrom
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const userRecommendsByRecommendId = /* GraphQL */ `
+  query UserRecommendsByRecommendId(
+    $recommendId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelUserRecommendFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    userRecommendsByRecommendId(
+      recommendId: $recommendId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        recommendId
+        userId
+        recommend {
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        user {
+          id
+          name
+          status
+          image
+          age
+          heartto
+          heartfrom
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const userRecommendsByUserId = /* GraphQL */ `
+  query UserRecommendsByUserId(
+    $userId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelUserRecommendFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    userRecommendsByUserId(
+      userId: $userId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        recommendId
+        userId
+        recommend {
+          id
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        user {
+          id
+          name
+          status
+          image
+          age
+          heartto
+          heartfrom
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
         }
         createdAt
         updatedAt
@@ -437,6 +965,14 @@ export const getUserChatRoom = /* GraphQL */ `
           startedAt
         }
         ChatRooms {
+          nextToken
+          startedAt
+        }
+        Recommends {
+          nextToken
+          startedAt
+        }
+        ReplyYes {
           nextToken
           startedAt
         }

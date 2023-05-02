@@ -41,6 +41,7 @@ const ContactsScreen = () => {
       // });
 
       setUsers(result.data?.listUsers?.items);
+      console.log("contactScreen On");
       console.log(users);
     });
   }, []);
