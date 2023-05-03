@@ -9,6 +9,7 @@ import { listRecommends } from "./queries";
 
 const StatusScreen = () => {
   const [recommends, setRecommends] = useState([]);
+  const [authUserId, setAuthUserId] = useState([]);
   useEffect(() => {
     const fetchRecommends = async () => {
       const authUser = await Auth.currentAuthenticatedUser();
@@ -18,6 +19,7 @@ const StatusScreen = () => {
 
       console.log("BB : ", response.data.getUser.Recommends.items);
       setRecommends(response.data.getUser.Recommends.items);
+      setAuthUserId(authUser.attributes.sub);
       // response.data.getUser.Recommends.items[0].recommend.users.items
     };
     fetchRecommends();
@@ -61,11 +63,13 @@ const StatusScreen = () => {
   //     // console.log("recommends : ", recommends);
   //   });
   // }, []);
-
+  const aaa = { abc: "123" };
   return (
     <FlatList
       data={recommends}
-      renderItem={({ item }) => <RecommendItem recommend={item.recommend} />}
+      renderItem={({ item }) => (
+        <RecommendItem recommend={item.recommend} authUserId={authUserId} />
+      )}
       style={{ backgroundColor: "white" }}
     />
     // <Text>sdf</Text>

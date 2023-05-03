@@ -1,20 +1,44 @@
 import { Text, View, Image, StyleSheet, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useState } from "react";
 
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
 dayjs.extend(relativeTime);
 
-const RecommendItem = ({ recommend }) => {
+const RecommendItem = ({ recommend, authUserId }) => {
   // const navigation = useNavigation();
   // console.log("aaa : ", recommend);
+  // console.log("name : ", recommend.users.items[1].user);
+
+  // set one recommendedUserData between two users data
+  let recommendedUser = {};
+  // const [recommendedUser, setRecommendedUser] = useState([]);
+
+  recommend.users.items.forEach((ele) => {
+    // console.log("CC : ", ele.user.id);
+    if (ele.user.id !== authUserId) {
+      recommendedUser = { ...ele };
+    }
+  });
+  console.log("recommendedUserName : ", recommendedUser.user.name);
 
   return (
     <Pressable style={styles.container}>
-      <Text style={styles.name}>{recommend.updatedAt} </Text>
-      <Text style={styles.subTitle}>{recommend.users.items[0].user.name}</Text>
-      {/* recommend.users.items */}
+      <View style={styles.content}>
+        <View style={styles.row}>
+          <Text style={styles.name} numberOfLines={1}>
+            updatedAt : {recommend.updatedAt}
+          </Text>
+        </View>
+        <Text numberOfLines={2} style={styles.subTitle}>
+          name : {recommend.users.items[0].user.name}
+        </Text>
+        <Text numberOfLines={2} style={styles.subTitle}>
+          age : {recommend.users.items[0].user.age}
+        </Text>
+      </View>
     </Pressable>
   );
 };
