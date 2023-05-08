@@ -41,7 +41,7 @@ function App() {
         graphqlOperation(getUser, { id: authUser.attributes.sub })
       );
 
-      console.log("userData : ", userData);
+      // console.log("userData(App.js) : ", userData);
 
       // const deleteTemp = {
       //   id: 3,
@@ -92,10 +92,10 @@ function App() {
     syncUser();
   }, []);
 
-  useEffect(() => {
-    const syncRecommend = async () => {};
-    syncRecommend();
-  }, []);
+  // useEffect(() => {
+  //   const syncRecommend = async () => {};
+  //   syncRecommend();
+  // }, []);
 
   return (
     <View style={styles.container}>

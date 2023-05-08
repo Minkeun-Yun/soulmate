@@ -5,6 +5,7 @@ export const listRecommends = /* GraphQL */ `
         items {
           recommend {
             id
+            _deleted
             users {
               items {
                 user {
@@ -21,6 +22,7 @@ export const listRecommends = /* GraphQL */ `
               }
             }
             updatedAt
+            createdAt
           }
         }
       }
