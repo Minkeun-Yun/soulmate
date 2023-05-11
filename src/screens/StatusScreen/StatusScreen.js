@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Alert, Text, StyleSheet, Pressable } from "react-native";
 import { FlatList } from "react-native";
+import { useRoute, useNavigation } from "@react-navigation/native";
 // import chats from "../../../assets/data/chats.json";
 import RecommendItem from "../../components/RecommendItem";
 import { API, graphqlOperation, Auth } from "aws-amplify";
@@ -10,6 +11,8 @@ import { listRecommends } from "./queries";
 import { createRecommend, createUserRecommend } from "../../graphql/mutations";
 
 const StatusScreen = () => {
+  const route = useRoute();
+  const navigation = useNavigation();
   const [recommends, setRecommends] = useState([]);
 
   console.log("StatusScreen ON");
@@ -41,7 +44,7 @@ const StatusScreen = () => {
       // after completion, move in "oneMoreRecommend fn"
       const tempAllUserList = await API.graphql(graphqlOperation(listUsers));
       const allUserList = tempAllUserList.data?.listUsers?.items || [];
-      console.log("all : ", allUserList);
+      // console.log("all : ", allUserList);
 
       // response.data.getUser.Recommends.items[0].recommend.users.items
 
@@ -82,6 +85,8 @@ const StatusScreen = () => {
   };
 
   const onRecommendPress = () => {
+    // navigation.navigate("Test", { id: 123 });
+
     Alert.alert("포인트사용 : 추천 더 받기", "100 포인트가 사용됩니다. ", [
       { text: "Cancel", style: "cancel" },
       {
@@ -130,14 +135,20 @@ const StatusScreen = () => {
       })
     );
 
+    //after check recommended User, fix below userId
+
+    console.log("AAaAAAAA");
+
     await API.graphql(
       graphqlOperation(createUserRecommend, {
         input: {
-          userId: 2,
+          userId: 3,
           recommendId: newRecommend.id,
         },
       })
     );
+
+    console.log("BBBBBBBB");
   };
 
   // createRecommend

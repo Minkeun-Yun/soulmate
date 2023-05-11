@@ -1,9 +1,9 @@
 import { Text, View, Image, StyleSheet, Pressable } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useRoute, useNavigation } from "@react-navigation/native";
 import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { listRecommends } from "../../graphql/queries";
+import { createChatRoom, createUserChatRoom } from "../../graphql/mutations";
 import { getRecommend } from "./queries";
 import { createReplyYes } from "../../graphql/mutations";
 import { API, graphqlOperation, Auth } from "aws-amplify";
@@ -11,6 +11,9 @@ import { API, graphqlOperation, Auth } from "aws-amplify";
 dayjs.extend(relativeTime);
 
 const RecommendItem = ({ recommendId }) => {
+  const route = useRoute();
+  const navigation = useNavigation();
+
   const [authUserId, setAuthUserId] = useState(null);
   const [recommendedUser, setRecommendedUser] = useState({});
   const [recommend, setRecommend] = useState({});
@@ -160,9 +163,47 @@ const RecommendItem = ({ recommendId }) => {
       recommendedUser.user?.name
     );
 
-    // if (!myYes) setMyYes(true);
+    //if they send Yes each other(partner has sent already Yes), make a new chatroom.
+  };
 
-    //make button disabled
+  const onMakeChatRoom = async () => {
+    console.warn("채팅창만들기 Pressed!");
+
+    //
+    const newChatRoomData = await API.graphql(
+      graphqlOperation(createChatRoom, { input: {} })
+    );
+
+    console.log("newChatRoomData : ", newChatRoomData);
+
+    if (!newChatRoomData.data?.createChatRoom) {
+      console.log("Error. creating the new chatRoom");
+    }
+
+    const newChatRoom = newChatRoomData.data?.createChatRoom;
+
+    //
+    await API.graphql(
+      graphqlOperation(createUserChatRoom, {
+        input: { chatRoomId: newChatRoom.id, userId: recommendedUser.user?.id },
+      })
+    );
+
+    //
+
+    await API.graphql(
+      graphqlOperation(createUserChatRoom, {
+        input: { chatRoomId: newChatRoom.id, userId: authUserId },
+      })
+    );
+
+    //
+    navigation.navigate("Chat", {
+      id: newChatRoom.id,
+      name: recommendedUser.user?.name,
+    });
+
+    // navigation.navigate("Chat", { id: chat.id, name: user.name })
   };
 
   return (
@@ -204,6 +245,11 @@ const RecommendItem = ({ recommendId }) => {
             관심 보내기 {myYes ? "Already!" : "not Yet"}
           </Text>
         </Pressable>
+        <Pressable onPress={onMakeChatRoom} disabled={false}>
+          <Text numberOfLines={2} style={styles.sendButton2}>
+            채팅방 만들기 with {recommendedUser.user?.name}
+          </Text>
+        </Pressable>
       </View>
     </Pressable>
   );
@@ -214,7 +260,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginHorizontal: 10,
     marginVertical: 5,
-    height: 150,
+    height: 200,
     backgroundColor: "lightblue",
   },
   image: {
@@ -241,7 +287,12 @@ const styles = StyleSheet.create({
     color: "gray",
   },
   sendButton: {
-    width: 160,
+    width: 200,
+    height: 20,
+    backgroundColor: "lightyellow",
+  },
+  sendButton2: {
+    width: 300,
     height: 30,
     backgroundColor: "lightyellow",
   },
