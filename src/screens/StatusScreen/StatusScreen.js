@@ -13,6 +13,7 @@ const StatusScreen = () => {
   const [recommends, setRecommends] = useState([]);
 
   console.log("StatusScreen ON");
+
   useEffect(() => {
     const fetchRecommends = async () => {
       const authUser = await Auth.currentAuthenticatedUser();
@@ -40,7 +41,7 @@ const StatusScreen = () => {
       // after completion, move in "oneMoreRecommend fn"
       const tempAllUserList = await API.graphql(graphqlOperation(listUsers));
       const allUserList = tempAllUserList.data?.listUsers?.items || [];
-      // console.log("all : ", allUserList);
+      console.log("all : ", allUserList);
 
       // response.data.getUser.Recommends.items[0].recommend.users.items
 
@@ -132,7 +133,7 @@ const StatusScreen = () => {
     await API.graphql(
       graphqlOperation(createUserRecommend, {
         input: {
-          userId: 123,
+          userId: 2,
           recommendId: newRecommend.id,
         },
       })
@@ -186,14 +187,7 @@ const StatusScreen = () => {
       <FlatList
         data={recommends}
         renderItem={({ item }) => (
-          <RecommendItem
-            del={item.recommend._deleted}
-            recommendId={item.recommend.id}
-            recommend={item.recommend}
-            replyYesList={item.recommend.ReplyYes.items}
-            updatedAt={item.recommend.updatedAt}
-            createdAt={item.recommend.createdAt}
-          />
+          <RecommendItem recommendId={item.recommend?.id} />
         )}
         style={{ backgroundColor: "white" }}
       />

@@ -3,40 +3,62 @@ import { useNavigation } from "@react-navigation/native";
 import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { listRecommends } from "../../graphql/queries";
+import { getRecommend } from "./queries";
 import { createReplyYes } from "../../graphql/mutations";
 import { API, graphqlOperation, Auth } from "aws-amplify";
 
 dayjs.extend(relativeTime);
 
-const RecommendItem = ({
-  recommendId,
-  recommend,
-  replyYesList,
-  updatedAt,
-  createdAt,
-  del,
-}) => {
+const RecommendItem = ({ recommendId }) => {
   const [authUserId, setAuthUserId] = useState(null);
+  const [recommendedUser, setRecommendedUser] = useState({});
+  const [recommend, setRecommend] = useState({});
+  const [myYes, setMyYes] = useState(false);
+  const [yourYes, setYourYes] = useState(false);
+
+  // const recommendedUser = { ...tempRecommended?.user };
+
   useEffect(() => {
     const forEffect = async () => {
       const authUser = await Auth.currentAuthenticatedUser();
-      setAuthUserId(authUser.attributes.sub);
-
-      const yes1 = await replyYesList.some(
-        (e) => e.userID === authUser.attributes.sub
+      // console.log("re ID : ", recommendId);
+      const recommendData = await API.graphql(
+        graphqlOperation(getRecommend, { id: recommendId })
       );
-      setMyYes(yes1);
 
-      const yes2 = await replyYesList.some(
-        (e) => e.userID === recommendedUser.id
+      setRecommend(recommendData.data?.getRecommend);
+      setAuthUserId(authUser.attributes?.sub);
+
+      const tempRecommendedUserSet =
+        recommendData.data?.getRecommend?.users?.items;
+      // console.log("ReData : ", recommendData.data?.getRecommend?.users?.items);
+      const tempRecommendedUser = tempRecommendedUserSet.find(
+        (item) => item.user?.id !== authUser.attributes?.sub
       );
-      setYourYes(yes2);
+      setRecommendedUser({ ...tempRecommendedUser });
 
-      console.log("@ReplyYesList : ", replyYesList);
-      console.log("@recommendedUser.id : ", recommendedUser.id);
+      // console.log(
+      //   "replyList : ",
+      //   recommendData.data?.getRecommend?.ReplyYes?.items
+      // );
+
+      // console.log("^^^ : ", tempRecommendedUser);
+
+      // await console.log("@ReplyYesList : ", replyYesList);
+      // await console.log("@recommendedUser.id : ", recommendedUser.id);
     };
     forEffect();
   }, []);
+
+  useEffect(() => {
+    const yes1 = recommend.ReplyYes?.items.some((e) => e.userID === authUserId);
+    setMyYes(yes1);
+    const yes2 = recommend.ReplyYes?.items.some(
+      (e) => e.userID === recommendedUser.user?.id
+    );
+    setYourYes(yes2);
+  }, [recommendedUser, authUserId]);
 
   // console.log("recommend :", recommend);
   // console.log("authUserId :", authUserId);
@@ -44,13 +66,6 @@ const RecommendItem = ({
   // const navigation = useNavigation();
 
   // set one recommendedUserData from two users data
-  const tempRecommended = recommend.users?.items?.find(
-    (item) => item.user.id != authUserId
-  );
-  const recommendedUser = { ...tempRecommended?.user };
-
-  const [myYes, setMyYes] = useState(false);
-  const [yourYes, setYourYes] = useState(false);
 
   // console.log("recommendId :", recommendId);
   // console.log("myYES : ", myYes);
@@ -69,8 +84,9 @@ const RecommendItem = ({
     return false;
   };
 
-  // console.log("CC : ", recommend.updatedAt);
   const myRecent = isRecent(recommend.updatedAt);
+
+  // console.log("CC : ", recommend.updatedAt);
 
   // myYes={item.recommend.ReplyYes.items.some((e)=>e.userID === authUserId)}
   // yourYes={item.recommend.ReplyYes.items.some((e)=>e.userID === authUserId)}
@@ -124,7 +140,7 @@ const RecommendItem = ({
   //make the button to add ReplyYes
   const onYesPress = async () => {
     if (myYes) {
-      console.warn("already sending ReplyYes to ", recommendedUser.name);
+      console.warn("already sending ReplyYes to ", recommendedUser.user?.name);
       return;
     }
     setMyYes(true);
@@ -141,7 +157,7 @@ const RecommendItem = ({
       "generate replyYes From ",
       authUserId,
       ", sending replyYes to ",
-      recommendedUser.name
+      recommendedUser.user?.name
     );
 
     // if (!myYes) setMyYes(true);
@@ -154,29 +170,28 @@ const RecommendItem = ({
       <View style={styles.content}>
         <View style={styles.row}>
           <Text style={styles.name} numberOfLines={1}>
-            추천된 이성 {dayjs(updatedAt).fromNow(true)} ago
+            추천된 이성 {dayjs(recommend.updatedAt).fromNow(true)} ago
           </Text>
         </View>
         {/* {console.log("C", recommendId, ", myYes : ", myYes)} */}
 
         <Text numberOfLines={2} style={styles.subTitle}>
-          ID : {recommendedUser.id}
+          ID : {recommendedUser.user?.id}
         </Text>
         <Text numberOfLines={2} style={styles.subTitle}>
-          이름 : {recommendedUser.name}
+          이름 : {recommendedUser.user?.name}
         </Text>
-        {/* <Text numberOfLines={2} style={styles.subTitle}>
-          나이 : {recommendedUser.age}
-        </Text> */}
-        {/* <Text numberOfLines={2} style={styles.subTitle}>
-          삭제 : {del}
-        </Text> */}
+        <Text numberOfLines={2} style={styles.subTitle}>
+          나이 : {recommendedUser.user?.age}
+        </Text>
         <Text numberOfLines={2} style={styles.subTitle}>
           최근? : {myRecent ? "Yes" : "No"}
         </Text>
 
         <Text numberOfLines={2} style={styles.name}>
-          {yourYes ? recommendedUser.name + "님이 관심을 보냈습니다." : " "}
+          {yourYes
+            ? recommendedUser.user?.name + "님이 관심을 보냈습니다."
+            : " "}
           {/* {console.log("yourYes : ", yourYes)} */}
         </Text>
 

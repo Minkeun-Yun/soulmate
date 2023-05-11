@@ -139,6 +139,10 @@ export const getRecommend = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          user {
+            id
+            age
+          }
         }
         nextToken
         startedAt
