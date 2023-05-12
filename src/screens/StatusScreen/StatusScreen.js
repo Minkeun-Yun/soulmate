@@ -142,7 +142,7 @@ const StatusScreen = () => {
     await API.graphql(
       graphqlOperation(createUserRecommend, {
         input: {
-          userId: 3,
+          userId: "ad1cb433-e57d-4744-b970-c7e07e50afe1",
           recommendId: newRecommend.id,
         },
       })

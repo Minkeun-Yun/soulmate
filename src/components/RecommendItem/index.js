@@ -203,7 +203,10 @@ const RecommendItem = ({ recommendId }) => {
       name: recommendedUser.user?.name,
     });
 
-    // navigation.navigate("Chat", { id: chat.id, name: user.name })
+    navigation.navigate("Chat", {
+      id: newChatRoom.id,
+      name: recommendedUser.user?.name,
+    });
   };
 
   return (

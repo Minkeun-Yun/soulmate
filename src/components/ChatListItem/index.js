@@ -9,7 +9,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 
 const ChatListItem = ({ chat }) => {
-  console.log("chat info : ", chat);
+  // console.log("chat info : ", chat);
   const [user, setUser] = useState({});
 
   useEffect(() => {
@@ -19,7 +19,7 @@ const ChatListItem = ({ chat }) => {
         (e) => e.user.id !== authUser.attributes.sub
       );
       setUser(tempUser.user);
-      console.log("CC: ", tempUser.user);
+      // console.log("CC: ", tempUser.user);
     };
     fetchUser();
   }, []);
@@ -34,7 +34,7 @@ const ChatListItem = ({ chat }) => {
       }
       style={styles.container}
     >
-      <Image source={{ uri: user?.image }} style={styles.image} />
+      <Image style={styles.image} />
 
       <View style={styles.content}>
         <View style={styles.row}>
@@ -42,12 +42,12 @@ const ChatListItem = ({ chat }) => {
             {user.name}
           </Text>
           <Text style={styles.subTitle}>
-            {dayjs(chat.lastMessage?.createdAt).fromNow(true)}
+            {dayjs(chat.LastMessage?.createdAt).fromNow(true)}
           </Text>
         </View>
 
         <Text numberOfLines={2} style={styles.subTitle}>
-          {chat.lastMessage?.text}
+          {chat.LastMessage?.text}
         </Text>
       </View>
     </Pressable>
