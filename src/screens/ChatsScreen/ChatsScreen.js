@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { API, graphqlOperation, Auth } from "aws-amplify";
 
 import { listChatRooms } from "./queries";
-import { userChatRoomsByChatRoomId } from "../../graphql/queries";
+
 const ChatsScreen = () => {
   const [chatRooms, setChatRooms] = useState([]);
 
@@ -18,8 +18,14 @@ const ChatsScreen = () => {
           id: authUser?.attributes.sub,
         })
       );
-      console.log(response.data?.getUser?.ChatRooms?.items || []);
-      setChatRooms(response.data?.getUser?.ChatRooms?.items);
+      const rooms = response.data?.getUser?.ChatRooms?.items;
+      const sortedRooms = rooms.sort(
+        (r1, r2) =>
+          new Date(r2.chatRoom.updatedAt) - new Date(r1.chatRoom.updatedAt)
+      );
+
+      // console.log("NNN : ", response.data.getUser.ChatRooms.items);
+      setChatRooms(sortedRooms);
     };
     fetchChatRooms();
   }, []);
