@@ -17,15 +17,26 @@ import { getChatRoom } from "../graphql/queries";
 
 const ChatScreen = () => {
   const [chatRoom, setChatRoom] = useState(null);
+  const [messeges, setMessages] = useState([]);
+
   const route = useRoute();
   const navigation = useNavigation();
   const chatRoomId = route.params.id;
 
   useEffect(() => {
     API.graphql(graphqlOperation(getChatRoom, { id: chatRoomId })).then(
-      (result) => setChatRoom(result.data?.getChatRoom)
+      (result) => {
+        setChatRoom(result.data?.getChatRoom);
+
+        const tempMessageSet = result.data?.getChatRoom?.Messages?.items || [];
+        console.log("bb : ", result.data?.getChatRoom?.Messages?.items[0]);
+        const sortedMessage = tempMessageSet.sort(
+          (r1, r2) => new Date(r2.createdAt) - new Date(r1.createdAt)
+        );
+        setMessages(sortedMessage);
+      }
     );
-  }, []);
+  }, [chatRoomId]);
 
   useEffect(() => {
     navigation.setOptions({ title: route.params.name });

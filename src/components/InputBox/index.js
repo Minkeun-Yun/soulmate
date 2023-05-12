@@ -4,36 +4,41 @@ import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { API, graphqlOperation, Auth } from "aws-amplify";
 import { createMessage, updateChatRoom } from "../../graphql/mutations";
+import { getChatRoom } from "../../graphql/queries";
 
 const InputBox = ({ chatRoom }) => {
   const [text, setText] = useState("");
 
   const onSend = async () => {
-    console.warn("Sending a new message: ", text);
+    // console.warn("Sending a new message: ", text);
+    if (text === "") return;
 
     const authUser = await Auth.currentAuthenticatedUser();
 
-    console.log("chatRoom : ", chatRoom);
-
-    const newMessage = {
+    const newMessageInput = {
       chatroomID: chatRoom.id,
       text,
       userID: authUser.attributes.sub,
     };
 
     const newMessageData = await API.graphql(
-      graphqlOperation(createMessage, { input: newMessage })
+      graphqlOperation(createMessage, { input: newMessageInput })
     );
 
     setText("");
-    console.log("newMessageData : ", newMessageData);
-    //
+
+    //should load chatRoom version
+    const tempChatRoom = await API.graphql(
+      graphqlOperation(getChatRoom, { id: chatRoom.id })
+    );
+    // console.log("tempChatRoom : ", tempChatRoom.data.getChatRoom._version);
+
     await API.graphql(
       graphqlOperation(updateChatRoom, {
         input: {
           id: chatRoom.id,
           chatRoomLastMessageId: newMessageData.data?.createMessage?.id,
-          _version: chatRoom._version,
+          _version: tempChatRoom.data?.getChatRoom?._version,
         },
       })
     );
