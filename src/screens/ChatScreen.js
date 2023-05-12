@@ -11,9 +11,10 @@ import Message from "../components/Message";
 import InputBox from "../components/InputBox";
 
 import bg from "../../assets/images/BG.png";
-import messages from "../../assets/data/messages.json";
+
 import { API, graphqlOperation, Auth } from "aws-amplify";
 import { getChatRoom } from "../graphql/queries";
+import { onCreateMessage } from "../graphql/subscriptions";
 
 const ChatScreen = () => {
   const [chatRoom, setChatRoom] = useState(null);
@@ -29,13 +30,28 @@ const ChatScreen = () => {
         setChatRoom(result.data?.getChatRoom);
 
         const tempMessageSet = result.data?.getChatRoom?.Messages?.items || [];
-        console.log("bb : ", result.data?.getChatRoom?.Messages?.items[0]);
+        // console.log("bb : ", result.data?.getChatRoom?.Messages?.items[0]);
         const sortedMessage = tempMessageSet.sort(
           (r1, r2) => new Date(r2.createdAt) - new Date(r1.createdAt)
         );
         setMessages(sortedMessage);
       }
     );
+  }, [chatRoomId]);
+
+  useEffect(() => {
+    const subscription = API.graphql(
+      graphqlOperation(onCreateMessage, {
+        filter: { chatroomID: { eq: chatRoomId } },
+      })
+    ).subscribe({
+      next: ({ value }) => {
+        setMessages((m) => [value.data.onCreateMessage, ...m]);
+      },
+      error: (err) => console.warn(err),
+    });
+
+    return () => subscription.unsubscribe();
   }, [chatRoomId]);
 
   useEffect(() => {
@@ -56,7 +72,7 @@ const ChatScreen = () => {
     >
       <ImageBackground source={bg} style={styles.bg}>
         <FlatList
-          data={chatRoom.Messages?.items}
+          data={messeges}
           renderItem={({ item }) => <Message message={item} />}
           style={styles.list}
           inverted
