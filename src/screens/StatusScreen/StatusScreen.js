@@ -14,63 +14,37 @@ const StatusScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
   const [recommends, setRecommends] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   console.log("StatusScreen ON");
 
+  const fetchRecommends = async () => {
+    const authUser = await Auth.currentAuthenticatedUser();
+    const response = await API.graphql(
+      graphqlOperation(listRecommends, {
+        id: authUser?.attributes.sub,
+      })
+    );
+
+    // send these two data to RecommendItem Component
+    // console.log("????? : ", response.data.getUser.Recommends.items);
+
+    const tempRecommends = response?.data?.getUser?.Recommends?.items || [];
+    const sortedRecommends = tempRecommends
+      .sort(
+        (a, b) =>
+          new Date(b.recommend.createdAt) - new Date(a.recommend.createdAt)
+      )
+      .filter((ele) => !ele.recommend._deleted);
+
+    setRecommends(sortedRecommends);
+
+    // after completion, move in "oneMoreRecommend fn"
+    const tempAllUserList = await API.graphql(graphqlOperation(listUsers));
+    const allUserList = tempAllUserList.data?.listUsers?.items || [];
+  };
+
   useEffect(() => {
-    const fetchRecommends = async () => {
-      const authUser = await Auth.currentAuthenticatedUser();
-      const response = await API.graphql(
-        graphqlOperation(listRecommends, {
-          id: authUser?.attributes.sub,
-        })
-      );
-
-      // send these two data to RecommendItem Component
-      // console.log("????? : ", response.data.getUser.Recommends.items);
-
-      const tempRecommends = response?.data?.getUser?.Recommends?.items || [];
-      const sortedRecommends = tempRecommends
-        .sort(
-          (a, b) =>
-            new Date(b.recommend.createdAt) - new Date(a.recommend.createdAt)
-        )
-        .filter((ele) => !ele.recommend._deleted);
-
-      setRecommends(sortedRecommends);
-
-      // console.log("sortedRecommends1 : ", sortedRecommends);
-
-      // after completion, move in "oneMoreRecommend fn"
-      const tempAllUserList = await API.graphql(graphqlOperation(listUsers));
-      const allUserList = tempAllUserList.data?.listUsers?.items || [];
-      // console.log("all : ", allUserList);
-
-      // response.data.getUser.Recommends.items[0].recommend.users.items
-
-      // console.log(
-      //   "test : ",
-      //   response.data.getUser.Recommends.items[0].recommend.ReplyYes.items[0]
-      //     .userID
-      // );
-
-      // console.log(
-      //   "same? : ",
-      //   response.data?.getUser.Recommends.items[0].recommend?.ReplyYes.items.some(
-      //     (e) => e.userID === authUserId
-      //   )
-      // );
-
-      // response.data.getUser.Recommends.item.recommend.ReplyYes.items.forEach(
-      //   (re) => {
-      //     // console.log("re : ", re);
-      //     if (re.userID === authUserId) {
-      //       console.log("이미!");
-      //       return false;
-      //     }
-      //   }
-      // );
-    };
     fetchRecommends();
   }, []);
 
@@ -201,6 +175,8 @@ const StatusScreen = () => {
           <RecommendItem recommendId={item.recommend?.id} />
         )}
         style={{ backgroundColor: "white" }}
+        onRefresh={fetchRecommends}
+        refreshing={loading}
       />
       <Pressable
         onPress={onRecommendPress}
