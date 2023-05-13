@@ -3,7 +3,7 @@
   "cognitoConfig": {
     "identityPoolName": "testAuthIdentityPool",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "soulmad01b4e91",
+    "resourceNameTruncated": "soulma8ad88c0f",
     "userPoolName": "soulmate",
     "autoVerifiedAttributes": [
       "email"
@@ -19,15 +19,19 @@
     "defaultPasswordPolicy": false,
     "passwordPolicyMinLength": 6,
     "passwordPolicyCharacters": [],
-    "requiredAttributes": [],
+    "requiredAttributes": [
+      "gender",
+      "birthdate",
+      "nickname"
+    ],
     "aliasAttributes": [],
     "userpoolClientGenerateSecret": false,
     "userpoolClientRefreshTokenValidity": 30,
     "userpoolClientWriteAttributes": [],
     "userpoolClientReadAttributes": [],
-    "userpoolClientLambdaRole": "soulmad01b4e91_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "soulma8ad88c0f_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "d01b4e91",
+    "sharedId": "8ad88c0f",
     "resourceName": "soulmate",
     "authSelections": "identityPoolAndUserPool",
     "serviceName": "Cognito",
@@ -41,6 +45,21 @@
     "thirdPartyAuth": false,
     "authProviders": [],
     "usernameCaseSensitive": false,
-    "useEnabledMfas": true
+    "useEnabledMfas": true,
+    "authRoleArn": {
+      "Fn::GetAtt": [
+        "AuthRole",
+        "Arn"
+      ]
+    },
+    "unauthRoleArn": {
+      "Fn::GetAtt": [
+        "UnauthRole",
+        "Arn"
+      ]
+    },
+    "breakCircularDependency": true,
+    "dependsOn": [],
+    "hostedUI": false
   }
 }

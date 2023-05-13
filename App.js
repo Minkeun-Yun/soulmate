@@ -82,7 +82,7 @@ function App() {
       //if there is no users in db, create one
       const newUser = {
         id: authUser.attributes.sub,
-        name: authUser.attributes.email,
+        name: Math.random() * 30,
         status: "im a new guy!!! ",
       };
       const newUserResponse = await API.graphql(

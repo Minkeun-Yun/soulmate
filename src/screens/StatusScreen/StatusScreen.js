@@ -74,11 +74,15 @@ const StatusScreen = () => {
   const oneMoreRecommend = async () => {
     //check if there is no other recommend between me and recommended user.
 
+    //
+    if (false) {
+      console.log("코인이 부족하면 여기서 멈춤");
+    }
+
     console.warn("추천 하나 더 !! 고마워!");
 
     console.log("recommends : ", recommends);
 
-    //
     // recommends.some((re)=>re.recommend.users.items.some((rere)=>rere.id === 3))
     // console.log(
     //   "BBB: ",
@@ -125,48 +129,6 @@ const StatusScreen = () => {
     console.log("BBBBBBBB");
   };
 
-  // createRecommend
-  // createUserRecommend(input: {recommendId: "", userId: ""})
-
-  // useEffect(() => {
-  //   API.graphql(graphqlOperation(listRecommends)).then((result) => {
-  //     // const filtered = result.data?.listUsers?.items.filter(
-  //     //   (one) => !one._deleted
-  //     // );
-  //     console.log("-----Status Screen on-----");
-  //     console.log("recommend : :", result.data.listRecommends.items);
-  //     // setRecommends(result.data?.listRecommends?.items);
-
-  //     // result.data?.listUsers?.items.forEach((element) => {
-  //     //   if (element._deleted) {
-  //     //     const willdeleteUser = {
-  //     //       id: element.id,
-  //     //     };
-  //     //     const willdeleteUserResponse = API.graphql(
-  //     //       graphqlOperation(deleteUser, { input: willdeleteUser })
-  //     //     );
-  //     //     console.log(willdeleteUser);
-  //     //   }
-  //     // });
-
-  //     // result.data?.listUsers?.items.forEach((element) => {
-  //     //   if (element._deleted) {
-  //     //     const willrevival = {
-  //     //       id: element.id,
-  //     //       _delete: false,
-  //     //     };
-  //     //     const willrevivalResponse = API.graphql(
-  //     //       graphqlOperation(updateUser, { input: willrevival })
-  //     //     );
-  //     //     console.log(willrevivalResponse);
-  //     //   }
-  //     // });
-
-  //     // setRecommends(result.data?.listUsers?.items);
-  //     // console.log("recommends : ", recommends);
-  //   });
-  // }, []);
-
   return (
     <>
       <FlatList
@@ -183,7 +145,7 @@ const StatusScreen = () => {
         style={styles.sendButton}
         disabled={false}
       >
-        <Text>추천 받기</Text>
+        <Text>Soulmate 추천 받기</Text>
       </Pressable>
     </>
   );

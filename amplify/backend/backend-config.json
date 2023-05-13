@@ -35,7 +35,11 @@
           "passwordPolicyCharacters": [],
           "passwordPolicyMinLength": 6
         },
-        "signupAttributes": [],
+        "signupAttributes": [
+          "GENDER",
+          "BIRTHDATE",
+          "NICKNAME"
+        ],
         "socialProviders": [],
         "usernameAttributes": [
           "EMAIL"
