@@ -47,10 +47,14 @@ const ChatScreen = () => {
       graphqlOperation(onUpdateChatRoom, { filter: { id: { eq: chatRoomId } } })
     ).subscribe({
       next: ({ value }) => {
-        setChatRoom((cr) => ({
-          ...(cr || {}),
-          ...value.data.onUpdateChatRoom,
-        }));
+        // console.log("VV : ", value);
+        setChatRoom((cr) => {
+          // console.log("cr : ", cr);
+          return {
+            ...(cr || {}),
+            ...value.data.onUpdateChatRoom,
+          };
+        });
       },
       error: (err) => console.warn(err),
     });

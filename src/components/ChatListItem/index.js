@@ -1,7 +1,8 @@
 import { Text, View, Image, StyleSheet, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Auth } from "aws-amplify";
+import { Auth, API, graphqlOperation } from "aws-amplify";
 import { useState, useEffect } from "react";
+import { onUpdateChatRoom } from "../../graphql/subscriptions";
 
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -10,12 +11,14 @@ dayjs.extend(relativeTime);
 
 const ChatListItem = ({ chat }) => {
   // console.log("chat info : ", chat);
+  const navigation = useNavigation();
   const [user, setUser] = useState({});
+  const [chatRoom, setChatRoom] = useState(chat);
 
   useEffect(() => {
     const fetchUser = async () => {
       const authUser = await Auth.currentAuthenticatedUser();
-      const tempUser = chat.users.items.find(
+      const tempUser = chatRoom.users.items.find(
         (e) => e.user.id !== authUser.attributes.sub
       );
       setUser(tempUser.user);
@@ -24,13 +27,34 @@ const ChatListItem = ({ chat }) => {
     fetchUser();
   }, []);
 
-  const navigation = useNavigation();
+  useEffect(() => {
+    //
+    const subscription = API.graphql(
+      graphqlOperation(onUpdateChatRoom, {
+        filter: { id: { eq: chatRoom.id } },
+      })
+    ).subscribe({
+      next: ({ value }) => {
+        // console.log("VV : ", value);
+        setChatRoom((cr) => {
+          // console.log("cr : ", cr);
+          return {
+            ...(cr || {}),
+            ...value.data.onUpdateChatRoom,
+          };
+        });
+      },
+      error: (err) => console.warn(err),
+    });
+    return () => subscription.unsubscribe();
+  }, [chatRoom.id]);
+
   // console.log("A : ", chat.users?.items);
 
   return (
     <Pressable
       onPress={() =>
-        navigation.navigate("Chat", { id: chat.id, name: user.name })
+        navigation.navigate("Chat", { id: chatRoom.id, name: user.name })
       }
       style={styles.container}
     >
@@ -41,15 +65,15 @@ const ChatListItem = ({ chat }) => {
           <Text style={styles.name} numberOfLines={1}>
             {user.name}
           </Text>
-          {chat.LastMessage && (
+          {chatRoom.LastMessage && (
             <Text style={styles.subTitle}>
-              {dayjs(chat.LastMessage?.createdAt).fromNow(true)}
+              {dayjs(chatRoom.LastMessage?.createdAt).fromNow(true)}
             </Text>
           )}
         </View>
 
         <Text numberOfLines={2} style={styles.subTitle}>
-          {chat.LastMessage?.text}
+          {chatRoom.LastMessage?.text}
         </Text>
       </View>
     </Pressable>
