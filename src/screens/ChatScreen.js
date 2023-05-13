@@ -14,11 +14,11 @@ import bg from "../../assets/images/BG.png";
 
 import { API, graphqlOperation, Auth } from "aws-amplify";
 import { getChatRoom } from "../graphql/queries";
-import { onCreateMessage } from "../graphql/subscriptions";
+import { onCreateMessage, onUpdateChatRoom } from "../graphql/subscriptions";
 
 const ChatScreen = () => {
   const [chatRoom, setChatRoom] = useState(null);
-  const [messeges, setMessages] = useState([]);
+  const [messages, setMessages] = useState([]);
 
   const route = useRoute();
   const navigation = useNavigation();
@@ -35,8 +35,26 @@ const ChatScreen = () => {
           (r1, r2) => new Date(r2.createdAt) - new Date(r1.createdAt)
         );
         setMessages(sortedMessage);
+        // console.log(
+        //   "sortedmessages : ",
+        //   sortedMessage.map((e) => e.createdAt)
+        // );
       }
     );
+
+    //
+    const subscription = API.graphql(
+      graphqlOperation(onUpdateChatRoom, { filter: { id: { eq: chatRoomId } } })
+    ).subscribe({
+      next: ({ value }) => {
+        setChatRoom((cr) => ({
+          ...(cr || {}),
+          ...value.data.onUpdateChatRoom,
+        }));
+      },
+      error: (err) => console.warn(err),
+    });
+    return () => subscription.unsubscribe();
   }, [chatRoomId]);
 
   useEffect(() => {
@@ -47,6 +65,7 @@ const ChatScreen = () => {
     ).subscribe({
       next: ({ value }) => {
         setMessages((m) => [value.data.onCreateMessage, ...m]);
+        // console.log("messages : ", messages);
       },
       error: (err) => console.warn(err),
     });
@@ -72,7 +91,7 @@ const ChatScreen = () => {
     >
       <ImageBackground source={bg} style={styles.bg}>
         <FlatList
-          data={messeges}
+          data={messages}
           renderItem={({ item }) => <Message message={item} />}
           style={styles.list}
           inverted

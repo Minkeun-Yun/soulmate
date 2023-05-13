@@ -27,10 +27,10 @@ const InputBox = ({ chatRoom }) => {
 
     setText("");
 
-    //should load chatRoom version
-    const tempChatRoom = await API.graphql(
-      graphqlOperation(getChatRoom, { id: chatRoom.id })
-    );
+    //should load chatRoom version [SELF MADE]
+    // const tempChatRoom = await API.graphql(
+    //   graphqlOperation(getChatRoom, { id: chatRoom.id })
+    // );
     // console.log("tempChatRoom : ", tempChatRoom.data.getChatRoom._version);
 
     await API.graphql(
@@ -38,7 +38,7 @@ const InputBox = ({ chatRoom }) => {
         input: {
           id: chatRoom.id,
           chatRoomLastMessageId: newMessageData.data?.createMessage?.id,
-          _version: tempChatRoom.data?.getChatRoom?._version,
+          _version: chatRoom._version,
         },
       })
     );
