@@ -1,14 +1,20 @@
+import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, SafeAreaView } from "react-native";
 import Navigator from "./src/navigation";
+
 import { Amplify, Auth, API, graphqlOperation } from "aws-amplify";
-import { withAuthenticator } from "aws-amplify-react-native";
 import awsconfig from "./src/aws-exports";
+
+import { withAuthenticator } from "aws-amplify-react-native";
+
 import { useEffect } from "react";
 import { getUser } from "./src/graphql/queries";
 import { createUser, updateUser, deleteUser } from "./src/graphql/mutations";
+// import { NativeBaseProvider, Box } from "native-base";
 
 Amplify.configure({ ...awsconfig, Analytics: { disabled: true } });
+// Amplify.configure(awsconfig);
 
 function App() {
   let today = new Date();
@@ -40,39 +46,7 @@ function App() {
       const userData = await API.graphql(
         graphqlOperation(getUser, { id: authUser.attributes.sub })
       );
-
-      // console.log("userData(App.js) : ", userData);
-
-      // const deleteTemp = {
-      //   id: 3,
-      //   _version: userData.data.getUser._version,
-      // };
-
-      // const deleteTempResponse = await API.graphql(
-      //   graphqlOperation(deleteUser, {
-      //     input: deleteTemp,
-      //   })
-      // );
-      // console.log("delete : ", deleteTempResponse);
-
-      //** UPDATE TEST */
-
-      // const tempHeartToArray = [...userData.data.getUser.heartto, 123];
-      // const tempHeartFromArray = [...userData.data.getUser.heartfrom, 321];
-
-      // const updateTemp = {
-      //   id: authUser.attributes.sub,
-      //   _version: userData.data.getUser._version,
-      //   heartto: tempHeartToArray,
-      //   heartfrom: tempHeartFromArray,
-      // };
-
-      // const updateTempResponse = await API.graphql(
-      //   graphqlOperation(updateUser, {
-      //     input: updateTemp,
-      //   })
-      // );
-      // console.log("update : ", updateTempResponse);
+      // console.log("userData: ", userData);
 
       if (userData.data.getUser) {
         console.log("user already exists in DB");
@@ -92,15 +66,10 @@ function App() {
     syncUser();
   }, []);
 
-  // useEffect(() => {
-  //   const syncRecommend = async () => {};
-  //   syncRecommend();
-  // }, []);
-
   return (
+    // <NativeBaseProvider style={styles.container}>
     <View style={styles.container}>
       <Navigator />
-
       <StatusBar style="auto" />
     </View>
   );
@@ -113,4 +82,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+
 export default withAuthenticator(App);

@@ -9,6 +9,7 @@ import { API, graphqlOperation, Auth } from "aws-amplify";
 import { listUsers } from "../../graphql/queries";
 import { listRecommends } from "./queries";
 import { createRecommend, createUserRecommend } from "../../graphql/mutations";
+import OnboardingNameScreen from "../OnboardingNameScreen";
 
 const StatusScreen = () => {
   const route = useRoute();
@@ -146,6 +147,9 @@ const StatusScreen = () => {
         disabled={false}
       >
         <Text>Soulmate 추천 받기</Text>
+      </Pressable>
+      <Pressable onPress={OnboardingNameScreen} style={styles.sendButton}>
+        <Text>Onboading</Text>
       </Pressable>
     </>
   );
