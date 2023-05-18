@@ -13,8 +13,8 @@ import { getUser } from "./src/graphql/queries";
 import { createUser, updateUser, deleteUser } from "./src/graphql/mutations";
 // import { NativeBaseProvider, Box } from "native-base";
 
-Amplify.configure({ ...awsconfig, Analytics: { disabled: true } });
-// Amplify.configure(awsconfig);
+// Amplify.configure({ ...awsconfig, Analytics: { disabled: true } });
+Amplify.configure(awsconfig);
 
 function App() {
   let today = new Date();
@@ -131,5 +131,5 @@ const signUpConfig = {
   ],
 };
 
-export default withAuthenticator(App, { signUpConfig });
-// export default (App);
+// export default withAuthenticator(App, { signUpConfig });
+export default App;
