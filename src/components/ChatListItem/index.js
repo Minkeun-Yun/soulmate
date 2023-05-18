@@ -18,8 +18,8 @@ const ChatListItem = ({ chat }) => {
   useEffect(() => {
     const fetchUser = async () => {
       const authUser = await Auth.currentAuthenticatedUser();
-      const tempUser = chatRoom.users.items.find(
-        (e) => e.user.id !== authUser.attributes.sub
+      const tempUser = chatRoom.users?.items.find(
+        (e) => e.user.id !== authUser.attributes?.sub
       );
       setUser(tempUser.user);
       // console.log("CC: ", tempUser.user);
@@ -40,7 +40,7 @@ const ChatListItem = ({ chat }) => {
           // console.log("cr : ", cr);
           return {
             ...(cr || {}),
-            ...value.data.onUpdateChatRoom,
+            ...value.data?.onUpdateChatRoom,
           };
         });
       },

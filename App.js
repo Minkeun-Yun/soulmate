@@ -41,6 +41,17 @@ function App() {
         bypassCache: true,
       });
       // console.log("authUser : ", authUser);
+      console.log("🚗authUser.attributes.sub : ", authUser.attributes.sub);
+      console.log(
+        "🚗authUser.attributes.name??xxx : ",
+        authUser.attributes.name
+      );
+      console.log("🚗authUser.attributes.email : ", authUser.attributes.email);
+      console.log(
+        "🚗authUser.attributes.preferred_username : ",
+        authUser.attributes.preferred_username
+      );
+      console.log("🚗authUser.username : ", authUser.username);
 
       //query the database using Auth user id(sub)
       const userData = await API.graphql(
@@ -56,8 +67,8 @@ function App() {
       //if there is no users in db, create one
       const newUser = {
         id: authUser.attributes.sub,
-        name: Math.random() * 30,
-        status: "im a new guy!!! ",
+        name: authUser?.attributes?.name,
+        status: "상태 메세지입니다.알았나요?",
       };
       const newUserResponse = await API.graphql(
         graphqlOperation(createUser, { input: newUser })
@@ -83,4 +94,42 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withAuthenticator(App);
+const signUpConfig = {
+  header: "Welcome Man~",
+  hideAllDefaults: true,
+  signUpFields: [
+    {
+      label: "Full name",
+      key: "name",
+      required: true,
+      displayOrder: 1,
+      type: "string",
+      //이게 닉네임 ㅡ 중복가능... 그냥 이름이니까...  중복이 되니까.. 의미 없는듯..
+    },
+    {
+      label: "Email",
+      key: "email",
+      required: true,
+      displayOrder: 2,
+      type: "string",
+    },
+    {
+      label: "Username",
+      key: "preferred_username",
+      required: true,
+      displayOrder: 3,
+      type: "string",
+      // 이게 아이디 (sub으로 사용됨) 그리고 노출되지 않음..ㅡ 중복불가
+    },
+    {
+      label: "Password",
+      key: "password",
+      required: true,
+      displayOrder: 4,
+      type: "password",
+    },
+  ],
+};
+
+export default withAuthenticator(App, { signUpConfig });
+// export default (App);

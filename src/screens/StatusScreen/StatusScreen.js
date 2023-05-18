@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Alert, Text, StyleSheet, Pressable } from "react-native";
+import { Alert, Text, StyleSheet, Pressable, Button, View } from "react-native";
 import { FlatList } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 // import chats from "../../../assets/data/chats.json";
@@ -10,17 +10,28 @@ import { listUsers } from "../../graphql/queries";
 import { listRecommends } from "./queries";
 import { createRecommend, createUserRecommend } from "../../graphql/mutations";
 import OnboardingNameScreen from "../OnboardingNameScreen";
+import { onCreateRecommend } from "../../graphql/subscriptions";
 
 const StatusScreen = () => {
+  // let [forREFRESH, setForREFRESH] = useState(0);
   const route = useRoute();
   const navigation = useNavigation();
   const [recommends, setRecommends] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [nickname, setNickname] = useState(null);
+  const [id1, setId1] = useState(null);
 
   console.log("StatusScreen ON");
 
   const fetchRecommends = async () => {
     const authUser = await Auth.currentAuthenticatedUser();
+    setId1(authUser?.attributes?.name);
+    setNickname(authUser?.attributes?.preferred_username);
+    console.log("name : ", authUser?.attributes?.name);
+    console.log(
+      "preferred_username : ",
+      authUser?.attributes?.preferred_username
+    );
     const response = await API.graphql(
       graphqlOperation(listRecommends, {
         id: authUser?.attributes.sub,
@@ -31,7 +42,7 @@ const StatusScreen = () => {
     // console.log("????? : ", response.data.getUser.Recommends.items);
 
     const tempRecommends = response?.data?.getUser?.Recommends?.items || [];
-    const sortedRecommends = tempRecommends
+    const sortedRecommends = await tempRecommends
       .sort(
         (a, b) =>
           new Date(b.recommend.createdAt) - new Date(a.recommend.createdAt)
@@ -39,15 +50,39 @@ const StatusScreen = () => {
       .filter((ele) => !ele.recommend._deleted);
 
     setRecommends(sortedRecommends);
+    // setRecommends(tempRecommends);
+    console.log("all Recommend : ", sortedRecommends);
 
     // after completion, move in "oneMoreRecommend fn"
-    const tempAllUserList = await API.graphql(graphqlOperation(listUsers));
-    const allUserList = tempAllUserList.data?.listUsers?.items || [];
+    // const tempAllUserList = await API.graphql(graphqlOperation(listUsers));
+    // const allUserList = tempAllUserList.data?.listUsers?.items || [];
   };
 
   useEffect(() => {
     fetchRecommends();
   }, []);
+
+  // useEffect(() => {
+  //   //
+  //   const subscription = API.graphql(
+  //     graphqlOperation(onCreateRecommend, {
+  //       filter: { id: { eq: chatRoom.id } },
+  //     })
+  //   ).subscribe({
+  //     next: ({ value }) => {
+  //       // console.log("VV : ", value);
+  //       setChatRoom((cr) => {
+  //         // console.log("cr : ", cr);
+  //         return {
+  //           ...(cr || {}),
+  //           ...value.data.onUpdateChatRoom,
+  //         };
+  //       });
+  //     },
+  //     error: (err) => console.warn(err),
+  //   });
+  //   return () => subscription.unsubscribe();
+  // }, []);
 
   const isRecent = (past) => {
     const diffTime =
@@ -80,7 +115,7 @@ const StatusScreen = () => {
       console.log("코인이 부족하면 여기서 멈춤");
     }
 
-    console.warn("추천 하나 더 !! 고마워!");
+    console.log("추천 하나 더 !! 고마워!");
 
     console.log("recommends : ", recommends);
 
@@ -115,19 +150,19 @@ const StatusScreen = () => {
     );
 
     //after check recommended User, fix below userId
-
-    console.log("AAaAAAAA");
+    // *******
+    const newRecommendUserId = "123";
 
     await API.graphql(
       graphqlOperation(createUserRecommend, {
         input: {
-          userId: "5da844bb-18cd-4b7b-84f7-b14797044720",
+          userId: newRecommendUserId,
           recommendId: newRecommend.id,
         },
       })
     );
 
-    console.log("BBBBBBBB");
+    // setForREFRESH(forREFRESH++);
   };
 
   return (
@@ -141,6 +176,7 @@ const StatusScreen = () => {
         onRefresh={fetchRecommends}
         refreshing={loading}
       />
+
       <Pressable
         onPress={onRecommendPress}
         style={styles.sendButton}
@@ -148,8 +184,18 @@ const StatusScreen = () => {
       >
         <Text>Soulmate 추천 받기</Text>
       </Pressable>
-      <Pressable onPress={OnboardingNameScreen} style={styles.sendButton}>
+
+      {/* navigation TEST */}
+      <Pressable
+        onPress={() => navigation.navigate("OnboardingNameScreen")}
+        style={styles.sendButton}
+      >
         <Text>Onboading</Text>
+      </Pressable>
+
+      {/* TEST button */}
+      <Pressable style={styles.sendButton}>
+        <Text onPress={() => Auth.signOut()}>Sign out</Text>
       </Pressable>
     </>
   );

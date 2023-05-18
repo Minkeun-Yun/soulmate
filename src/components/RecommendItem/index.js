@@ -35,33 +35,27 @@ const RecommendItem = ({ recommendId }) => {
 
       const tempRecommendedUserSet =
         recommendData.data?.getRecommend?.users?.items;
-      // console.log("ReData : ", recommendData.data?.getRecommend?.users?.items);
+      console.log(
+        "ReData(users) : ",
+        recommendData.data?.getRecommend?.users?.items
+      );
       const tempRecommendedUser = tempRecommendedUserSet.find(
         (item) => item.user?.id !== authUser.attributes?.sub
       );
       setRecommendedUser({ ...tempRecommendedUser });
-
-      // console.log(
-      //   "replyList : ",
-      //   recommendData.data?.getRecommend?.ReplyYes?.items
-      // );
-
-      // console.log("^^^ : ", tempRecommendedUser);
-
-      // await console.log("@ReplyYesList : ", replyYesList);
-      // await console.log("@recommendedUser.id : ", recommendedUser.id);
     };
     forEffect();
-  }, []);
+  }, [recommendId]);
 
   useEffect(() => {
     const yes1 = recommend.ReplyYes?.items.some((e) => e.userID === authUserId);
-    setMyYes(yes1);
+
     const yes2 = recommend.ReplyYes?.items.some(
       (e) => e.userID === recommendedUser.user?.id
     );
+    setMyYes(yes1);
     setYourYes(yes2);
-  }, [recommendedUser, authUserId]);
+  }, [recommend, recommendedUser, authUserId]);
 
   // console.log("recommend :", recommend);
   // console.log("authUserId :", authUserId);
@@ -89,49 +83,6 @@ const RecommendItem = ({ recommendId }) => {
 
   const myRecent = isRecent(recommend.updatedAt);
 
-  // console.log("CC : ", recommend.updatedAt);
-
-  // myYes={item.recommend.ReplyYes.items.some((e)=>e.userID === authUserId)}
-  // yourYes={item.recommend.ReplyYes.items.some((e)=>e.userID === authUserId)}
-
-  // console.log("replylist : ", replyYesList);
-
-  // console.log("loading a recommendItem");
-
-  // console.log(
-  //   "reply list : ",
-  //   replyYesList.items?.some((e) => e.userID === authUserId)
-  // );
-
-  // console.log("temp : ", tempRecommendedUser);
-  // setRecommendedUser({ ...tempRecommendedUser.user });
-  // setThisRecommend({ ...tempRecommendedUser });
-  // recommend.users.items.forEach((ele) => {
-  //   // console.log("CC : ", ele.user.id);
-  //   if (ele.user.id !== authUserId) {
-  //     // recommendedUser = { ...ele.user };
-  //     thisRecommend = { ...ele };
-  //     recommendedUser = { ...ele.user };
-  //   }
-  // });
-
-  // !!!!!!!!!!!!!!replyYesList.items === Array
-  // const tempAlready = replyYesList.items.find((re)=>re.userID === authUserId)
-  // if(tempAlready){
-  //   setAlreadySend(true);
-  // }else{
-  //   setAlreadySend();
-  // }
-  // setAlreadySend(true);
-
-  // replyYesList.items.forEach((re) => {
-  //   // console.log("re : ", re);
-  //   if (re.userID === authUserId) {
-  //     // setAlreadySend(true);
-  //     return false;
-  //   }
-  // });
-
   // if I pushed sendReplyYes before, make the sendReplyYes button disabled
 
   // if (ReplyYes are two), show HEART instead of sendReplyYes button
@@ -143,7 +94,7 @@ const RecommendItem = ({ recommendId }) => {
   //make the button to add ReplyYes
   const onYesPress = async () => {
     if (myYes) {
-      console.warn("already sending ReplyYes to ", recommendedUser.user?.name);
+      console.log("already sending ReplyYes to ", recommendedUser.user?.name);
       return;
     }
     setMyYes(true);
@@ -167,7 +118,7 @@ const RecommendItem = ({ recommendId }) => {
   };
 
   const onMakeChatRoom = async () => {
-    console.warn("채팅창만들기 Pressed!");
+    console.log("채팅창만들기 Pressed!");
 
     //
     const newChatRoomData = await API.graphql(
@@ -242,6 +193,9 @@ const RecommendItem = ({ recommendId }) => {
         <Text style={styles.name} numberOfLines={1}>
           re ID : {recommendId}
         </Text>
+        {/* <Text style={styles.name} numberOfLines={1}>
+          re ID : {recommendId}
+        </Text> */}
 
         <Pressable onPress={onYesPress} disabled={false}>
           <Text numberOfLines={1} style={styles.sendButton}>

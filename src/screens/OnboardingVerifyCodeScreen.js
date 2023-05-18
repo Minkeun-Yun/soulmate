@@ -23,7 +23,7 @@ import { useRoute } from "@react-navigation/native";
 
 export default function OnboardingEmailScreen({ navigation }) {
   const route = useRoute();
-  const username = "klsdjfkljsd";
+  const { username } = route.params || {};
 
   console.log("param.username", username, "received!");
 
@@ -60,26 +60,7 @@ export default function OnboardingEmailScreen({ navigation }) {
         <View>
           <MKBrand></MKBrand>
           <MKHeading>How old are you? ({username})</MKHeading>
-          {/* <Controller
-            control={control}
-            rules={{
-              required: true,
-            }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <MKInput
-                placeholder="Email address"
-                onBlur={onBlur}
-                onChangeText={(val) => {
-                  onChange(val);
-                  setIsValid(validateVerifyCode(val));
-                  // console.log("isValid", isValid);
-                }}
-                value={value.toLowerCase()}
-                autoFocus
-              />
-            )}
-            name="verifycode"
-          /> */}
+
           <Controller
             control={control}
             rules={{
@@ -88,11 +69,12 @@ export default function OnboardingEmailScreen({ navigation }) {
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
                 style={styles.input}
-                placeholder="veveve"
+                placeholder="Enter your age"
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
                 placeholderTextColor="slategray"
+                autoFocus
               />
             )}
             name="age"
@@ -119,7 +101,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingVertical: 12,
     // paddingHorizontal: 32,
-    borderRadius: "50%",
+    borderRadius: 50,
     // elevation: 3,
     backgroundColor: "white",
   },

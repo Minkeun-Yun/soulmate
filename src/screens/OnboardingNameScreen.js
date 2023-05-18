@@ -10,13 +10,9 @@ import {
 } from "react-native";
 
 import { useRoute } from "@react-navigation/native";
-
 import { MKHeading } from "../components/MKHeading";
-
 import { MKBrand } from "../components/MKBrand";
 import { useForm, Controller } from "react-hook-form";
-
-// import { Flex, VStack } from "native-base";
 
 export default function OnboardingNameScreen({ navigation }) {
   const route = useRoute();
@@ -44,8 +40,8 @@ export default function OnboardingNameScreen({ navigation }) {
   });
   const onSubmit = (data) => {
     console.log(data);
-    // navigation.navigate("OnboardingEmailScreen", { name: data.name });
-    navigation.navigate("OnboardingVerifyCodeScreen");
+    navigation.navigate("OnboardingVerifyCodeScreen", { username: data.name });
+    // navigation.navigate("OnboardingVerifyCodeScreen");
   };
 
   return (
@@ -151,7 +147,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingVertical: 12,
     // paddingHorizontal: 32,
-    borderRadius: "50%",
+    borderRadius: 50,
     // elevation: 3,
     backgroundColor: "white",
   },
