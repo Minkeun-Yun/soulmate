@@ -1,33 +1,33 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
-import CustomInput from '../../components/CustomInput';
-import CustomButton from '../../components/CustomButton';
-import SocialSignInButtons from '../../components/SocialSignInButtons';
-import {useNavigation} from '@react-navigation/core';
+import React, { useState } from "react";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
+import CustomInput from "../../components/CustomInput";
+import CustomButton from "../../components/CustomButton";
+import SocialSignInButtons from "../../components/SocialSignInButtons";
+import { useNavigation } from "@react-navigation/core";
+import { useForm, Controller, watch } from "react-hook-form";
+
+const EMAIL_REGEX =
+  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
 const SignUpScreen = () => {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordRepeat, setPasswordRepeat] = useState('');
-
+  const { control, handleSubmit, watch } = useForm();
+  const pwd = watch("password");
   const navigation = useNavigation();
 
   const onRegisterPressed = () => {
-    navigation.navigate('ConfirmEmail');
+    navigation.navigate("ConfirmEmail");
   };
 
   const onSignInPress = () => {
-    navigation.navigate('SignIn');
-
+    navigation.navigate("SignIn");
   };
 
   const onTermsOfUsePressed = () => {
-    console.warn('onTermsOfUsePressed');
+    console.warn("onTermsOfUsePressed");
   };
 
   const onPrivacyPressed = () => {
-    console.warn('onPrivacyPressed');
+    console.warn("onPrivacyPressed");
   };
 
   return (
@@ -36,32 +36,64 @@ const SignUpScreen = () => {
         <Text style={styles.title}>Create an account</Text>
 
         <CustomInput
+          name="username"
+          control={control}
           placeholder="Username"
-          value={username}
-          setValue={setUsername}
+          rules={{
+            require: "Username is required",
+            minLength: {
+              value: 3,
+              message: "Username should be at least 3 characters long",
+            },
+            maxLength: {
+              value: 24,
+              message: "Username should be max 24 characters long",
+            },
+          }}
         />
-        <CustomInput placeholder="Email" value={email} setValue={setEmail} />
         <CustomInput
+          name="email"
+          control={control}
+          placeholder="Email"
+          rules={{
+            require: "Username is required",
+            pattern: { value: EMAIL_REGEX, message: "Email is invalid" },
+          }}
+        />
+        <CustomInput
+          name="password"
+          control={control}
           placeholder="Password"
-          value={password}
-          setValue={setPassword}
           secureTextEntry
+          rules={{
+            require: "Password is required",
+            minLength: {
+              value: 8,
+              message: "Password should be at least 8 characters long",
+            },
+          }}
         />
         <CustomInput
+          name="password-repeat"
+          control={control}
           placeholder="Repeat Password"
-          value={passwordRepeat}
-          setValue={setPasswordRepeat}
           secureTextEntry
+          rules={{
+            validate: (value) => pwd === value || "Password do not match",
+          }}
         />
 
-        <CustomButton text="Register" onPress={onRegisterPressed} />
+        <CustomButton
+          text="Register"
+          onPress={handleSubmit(onRegisterPressed)}
+        />
 
         <Text style={styles.text}>
-          By registering, you confirm that you accept our{' '}
+          By registering, you confirm that you accept our{" "}
           <Text style={styles.link} onPress={onTermsOfUsePressed}>
             Terms of Use
-          </Text>{' '}
-          and{' '}
+          </Text>{" "}
+          and{" "}
           <Text style={styles.link} onPress={onPrivacyPressed}>
             Privacy Policy
           </Text>
@@ -81,21 +113,21 @@ const SignUpScreen = () => {
 
 const styles = StyleSheet.create({
   root: {
-    alignItems: 'center',
+    alignItems: "center",
     padding: 20,
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#051C60',
+    fontWeight: "bold",
+    color: "#051C60",
     margin: 10,
   },
   text: {
-    color: 'gray',
+    color: "gray",
     marginVertical: 10,
   },
   link: {
-    color: '#FDB075',
+    color: "#FDB075",
   },
 });
 

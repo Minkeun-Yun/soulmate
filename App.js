@@ -6,7 +6,7 @@ import Navigator from "./src/navigation";
 import { Amplify, Auth, API, graphqlOperation } from "aws-amplify";
 import awsconfig from "./src/aws-exports";
 
-import { withAuthenticator } from "aws-amplify-react-native";
+// import { withAuthenticator } from "aws-amplify-react-native";
 
 import { useEffect } from "react";
 import { getUser } from "./src/graphql/queries";
@@ -81,7 +81,7 @@ function App() {
     // <NativeBaseProvider style={styles.container}>
     <View style={styles.container}>
       <Navigator />
-      <StatusBar style="auto" />
+      {/* <StatusBar style="auto" /> */}
     </View>
   );
 }
@@ -94,42 +94,42 @@ const styles = StyleSheet.create({
   },
 });
 
-const signUpConfig = {
-  header: "Welcome Man~",
-  hideAllDefaults: true,
-  signUpFields: [
-    {
-      label: "Full name",
-      key: "name",
-      required: true,
-      displayOrder: 1,
-      type: "string",
-      //이게 닉네임 ㅡ 중복가능... 그냥 이름이니까...  중복이 되니까.. 의미 없는듯..
-    },
-    {
-      label: "Email",
-      key: "email",
-      required: true,
-      displayOrder: 2,
-      type: "string",
-    },
-    {
-      label: "Username",
-      key: "preferred_username",
-      required: true,
-      displayOrder: 3,
-      type: "string",
-      // 이게 아이디 (sub으로 사용됨) 그리고 노출되지 않음..ㅡ 중복불가
-    },
-    {
-      label: "Password",
-      key: "password",
-      required: true,
-      displayOrder: 4,
-      type: "password",
-    },
-  ],
-};
+// const signUpConfig = {
+//   header: "Welcome Man~",
+//   hideAllDefaults: true,
+//   signUpFields: [
+//     {
+//       label: "Full name",
+//       key: "name",
+//       required: true,
+//       displayOrder: 1,
+//       type: "string",
+//       //이게 닉네임 ㅡ 중복가능... 그냥 이름이니까...  중복이 되니까.. 의미 없는듯..
+//     },
+//     {
+//       label: "Email",
+//       key: "email",
+//       required: true,
+//       displayOrder: 2,
+//       type: "string",
+//     },
+//     {
+//       label: "Username",
+//       key: "preferred_username",
+//       required: true,
+//       displayOrder: 3,
+//       type: "string",
+//       // 이게 아이디 (sub으로 사용됨) 그리고 노출되지 않음..ㅡ 중복불가
+//     },
+//     {
+//       label: "Password",
+//       key: "password",
+//       required: true,
+//       displayOrder: 4,
+//       type: "password",
+//     },
+//   ],
+// };
 
 // export default withAuthenticator(App, { signUpConfig });
 export default App;

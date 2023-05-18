@@ -6,7 +6,6 @@ import {
   StyleSheet,
   useWindowDimensions,
   ScrollView,
-  Alert,
   Pressable,
 } from "react-native";
 import Logo from "../../../assets/images/Logo_1.png";
@@ -14,7 +13,7 @@ import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
 import SocialSignInButtons from "../../components/SocialSignInButtons";
 import { useNavigation } from "@react-navigation/native";
-import { useForm, Controller, watch } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Auth } from "aws-amplify";
 
 const SignInScreen = () => {
@@ -28,11 +27,8 @@ const SignInScreen = () => {
   const {
     control,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm();
-
-  // const nname = watch("username");
 
   const onSignInPressed = async (data) => {
     if (loading) {
@@ -43,12 +39,12 @@ const SignInScreen = () => {
     // console.log("watch : ", watch);
 
     setLoading(true);
-    try {
-      const response = await Auth.signIn(data.username, data.password);
-      console.log(response);
-    } catch (e) {
-      Alert.alert("oops!!", e.message);
-    }
+    // try {
+    //   const response = await Auth.signIn(data.username, data.password);
+    //   // console.log(response);
+    // } catch (e) {
+    //   console.log("oops!!", e.message);
+    // }
 
     // validate user
     // navigation.navigate("Home");
@@ -72,35 +68,20 @@ const SignInScreen = () => {
           style={[styles.logo, { height: height * 0.3 }]}
           resizeMode="contain"
         />
-
-        {/* <Controller
-          control={control}
-          rules={{ require: "Username is required" }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              placeholder="First name"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-            />
-          )}
-          name="firstName"
-        /> */}
-
         <CustomInput
           name="username"
           placeholder="Username"
           control={control}
-          rules={{ require: "Username is required" }}
+          rules={{ required: "Username is required" }}
         />
         <CustomInput
           name="password"
           placeholder="Password"
-          secureTextEntry
           control={control}
+          secureTextEntry
           rules={{
-            require: "Password is required",
-            minlength: {
+            required: "Password is required",
+            minLength: {
               value: 3,
               message: "Password should be minimum 3 characters long",
             },
@@ -116,6 +97,7 @@ const SignInScreen = () => {
           text="Forgot password?"
           onPress={onForgotPasswordPressed}
           type="TERTIARY"
+          // fgColor={"yellow"}
         />
 
         <Pressable

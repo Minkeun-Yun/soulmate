@@ -1,42 +1,47 @@
 import React from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
-import { useForm, Controller, watch } from "react-hook-form";
+import { Controller } from "react-hook-form";
 
 const CustomInput = ({
+  control,
   name,
-  value,
-  setValue,
+  rules = {},
   placeholder,
   secureTextEntry,
-  control,
 }) => {
   return (
     <Controller
-      value={value}
       control={control}
-      rules={{ require: "Username is required" }}
-      render={({ field: { onChange, onBlur, value } }) => (
-        <TextInput
-          value={value}
-          placeholder={placeholder}
-          style={styles.input}
-          secureTextEntry={secureTextEntry}
-          onBlur={onBlur}
-          onChangeText={onChange}
-        />
-      )}
       name={name}
+      rules={rules}
+      render={({
+        field: { value, onChange, onBlur },
+        fieldState: { error },
+      }) => (
+        <>
+          <View
+            style={[
+              styles.container,
+              { borderColor: error ? "red" : "#e8e8e8" },
+            ]}
+          >
+            <TextInput
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              placeholder={placeholder}
+              style={styles.input}
+              secureTextEntry={secureTextEntry}
+            />
+          </View>
+          {error && (
+            <Text style={{ color: "red", alignSelf: "stretch" }}>
+              {error.message || "Error"}
+            </Text>
+          )}
+        </>
+      )}
     />
-
-    // <View style={styles.container}>
-    //   <TextInput
-    //     value={value}
-    //     onChangeText={setValue}
-    //     placeholder={placeholder}
-    //     style={styles.input}
-    //     secureTextEntry={secureTextEntry}
-    //   />
-    // </View>
   );
 };
 
@@ -44,6 +49,8 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
     width: "100%",
+
+    padding: 15,
 
     borderColor: "#e8e8e8",
     borderWidth: 1,
