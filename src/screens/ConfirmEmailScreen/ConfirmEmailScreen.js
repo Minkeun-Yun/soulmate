@@ -1,25 +1,29 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
-import CustomInput from '../../components/CustomInput';
-import CustomButton from '../../components/CustomButton';
-import SocialSignInButtons from '../../components/SocialSignInButtons';
-import {useNavigation} from '@react-navigation/core';
+import React, { useState } from "react";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
+import CustomInput from "../../components/CustomInput";
+import CustomButton from "../../components/CustomButton";
+import SocialSignInButtons from "../../components/SocialSignInButtons";
+import { useNavigation } from "@react-navigation/core";
+import { useForm, Controller, watch } from "react-hook-form";
 
 const ConfirmEmailScreen = () => {
-  const [code, setCode] = useState('');
+  const { control, handleSubmit, watch } = useForm();
+  // const [code, setCode] = useState("");
 
   const navigation = useNavigation();
 
-  const onConfirmPressed = () => {
-    navigation.navigate('Home');
+  const onConfirmPressed = (data) => {
+    console.warn(data);
+
+    navigation.navigate("Home"); //why is error in console??? ah~! there is no Home page when you're not logged in
   };
 
   const onSignInPress = () => {
-    navigation.navigate('SignIn');
+    navigation.navigate("SignIn");
   };
 
   const onResendPress = () => {
-    console.warn('onResendPress');
+    console.warn("onResendPress");
   };
 
   return (
@@ -28,12 +32,13 @@ const ConfirmEmailScreen = () => {
         <Text style={styles.title}>Confirm your email</Text>
 
         <CustomInput
+          name="code"
+          control={control}
           placeholder="Enter your confirmation code"
-          value={code}
-          setValue={setCode}
+          rules={{ required: "Confirmation code is required" }}
         />
 
-        <CustomButton text="Confirm" onPress={onConfirmPressed} />
+        <CustomButton text="Confirm" onPress={handleSubmit(onConfirmPressed)} />
 
         <CustomButton
           text="Resend code"
@@ -53,21 +58,21 @@ const ConfirmEmailScreen = () => {
 
 const styles = StyleSheet.create({
   root: {
-    alignItems: 'center',
+    alignItems: "center",
     padding: 20,
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#051C60',
+    fontWeight: "bold",
+    color: "#051C60",
     margin: 10,
   },
   text: {
-    color: 'gray',
+    color: "gray",
     marginVertical: 10,
   },
   link: {
-    color: '#FDB075',
+    color: "#FDB075",
   },
 });
 

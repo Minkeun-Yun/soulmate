@@ -11,7 +11,7 @@ import {
 import Logo from "../../../assets/images/Logo_1.png";
 import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
-import SocialSignInButtons from "../../components/SocialSignInButtons";
+// import SocialSignInButtons from "../../components/SocialSignInButtons";
 import { useNavigation } from "@react-navigation/native";
 import { useForm } from "react-hook-form";
 import { Auth } from "aws-amplify";
@@ -39,15 +39,14 @@ const SignInScreen = () => {
     // console.log("watch : ", watch);
 
     setLoading(true);
-    // try {
-    //   const response = await Auth.signIn(data.username, data.password);
-    //   // console.log(response);
-    // } catch (e) {
-    //   console.log("oops!!", e.message);
-    // }
-
-    // validate user
-    // navigation.navigate("Home");
+    try {
+      const response = await Auth.signIn(data.username, data.password);
+      // validate user
+      navigation.navigate("Home");
+      // console.log(response);
+    } catch (e) {
+      console.log("oops!!", e.message);
+    }
 
     setLoading(false);
   };
@@ -100,16 +99,16 @@ const SignInScreen = () => {
           // fgColor={"yellow"}
         />
 
-        <Pressable
+        {/* <Pressable
           onPress={() => {
             console.log("logout");
             Auth.signOut();
           }}
         >
           <Text>log out</Text>
-        </Pressable>
+        </Pressable> */}
 
-        <SocialSignInButtons />
+        {/* <SocialSignInButtons /> */}
 
         <CustomButton
           text="Don't have an account? Create one"

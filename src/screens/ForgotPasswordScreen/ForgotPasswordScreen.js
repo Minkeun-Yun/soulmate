@@ -1,21 +1,23 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
-import CustomInput from '../../components/CustomInput';
-import CustomButton from '../../components/CustomButton';
-import SocialSignInButtons from '../../components/SocialSignInButtons';
-import {useNavigation} from '@react-navigation/core';
+import React, { useState } from "react";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
+import CustomInput from "../../components/CustomInput";
+import CustomButton from "../../components/CustomButton";
+import SocialSignInButtons from "../../components/SocialSignInButtons";
+import { useNavigation } from "@react-navigation/core";
 
+import { useForm, Controller, watch } from "react-hook-form";
 const ForgotPasswordScreen = () => {
-  const [username, setUsername] = useState('');
+  // const [username, setUsername] = useState('');
+  const { control, handleSubmit, watch } = useForm();
 
   const navigation = useNavigation();
 
   const onSendPressed = () => {
-    navigation.navigate('NewPassword');
+    navigation.navigate("NewPassword");
   };
 
   const onSignInPress = () => {
-    navigation.navigate('SignIn');
+    navigation.navigate("SignIn");
   };
 
   return (
@@ -24,12 +26,23 @@ const ForgotPasswordScreen = () => {
         <Text style={styles.title}>Reset your password</Text>
 
         <CustomInput
+          name="username"
+          control={control}
           placeholder="Username"
-          value={username}
-          setValue={setUsername}
+          rules={{
+            required: "Username is required",
+            minLength: {
+              value: 3,
+              message: "Username should be at least 3 characters long",
+            },
+            maxLength: {
+              value: 24,
+              message: "Username should be max 24 characters long",
+            },
+          }}
         />
 
-        <CustomButton text="Send" onPress={onSendPressed} />
+        <CustomButton text="Send" onPress={handleSubmit(onSendPressed)} />
 
         <CustomButton
           text="Back to Sign in"
@@ -43,21 +56,21 @@ const ForgotPasswordScreen = () => {
 
 const styles = StyleSheet.create({
   root: {
-    alignItems: 'center',
+    alignItems: "center",
     padding: 20,
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#051C60',
+    fontWeight: "bold",
+    color: "#051C60",
     margin: 10,
   },
   text: {
-    color: 'gray',
+    color: "gray",
     marginVertical: 10,
   },
   link: {
-    color: '#FDB075',
+    color: "#FDB075",
   },
 });
 

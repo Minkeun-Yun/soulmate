@@ -20,16 +20,19 @@ import ConfirmEmailScreen from "../screens/ConfirmEmailScreen/ConfirmEmailScreen
 import ForgotPasswordScreen from "../screens/ForgotPasswordScreen/ForgotPasswordScreen";
 import NewPasswordScreen from "../screens/NewPasswordScreen/NewPasswordScreen";
 import HomeScreen from "../screens/HomeScreen/HomeScreen";
-import { Auth } from "aws-amplify";
+import { Auth, Hub } from "aws-amplify";
 
 // const Stack = createStackNavigator();
 const Stack = createNativeStackNavigator();
 
 const Navigator = () => {
   const [user, setUser] = useState(undefined);
+
   const checkUser = async () => {
     try {
-      const authUser = await Auth.currentAuthenticatedUser();
+      const authUser = await Auth.currentAuthenticatedUser({
+        bypassCache: true,
+      });
       setUser(authUser);
     } catch (e) {
       setUser(null);
@@ -37,6 +40,17 @@ const Navigator = () => {
   };
   useEffect(() => {
     checkUser();
+  }, []);
+
+  useEffect(() => {
+    const listener = (data) => {
+      if (data.payload.event === "signIn" || data.payload.event === "signOut") {
+        checkUser();
+      }
+    };
+    const result = Hub.listen("auth", listener);
+    // result.Hub.
+    return () => Hub.remove("auth", listener);
   }, []);
 
   if (user === undefined) {
@@ -62,7 +76,32 @@ const Navigator = () => {
             <Stack.Screen name="NewPassword" component={NewPasswordScreen} />
           </>
         ) : (
-          <Stack.Screen name="Home" component={HomeScreen} />
+          <>
+            {/* <Stack.Screen name="Home" component={HomeScreen} /> */}
+
+            <Stack.Screen
+              name="OnboardingNameScreen"
+              component={OnboardingNameScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="OnboardingVerifyCodeScreen"
+              component={OnboardingVerifyCodeScreen}
+              options={{ headerShown: false }}
+            />
+
+            <Stack.Screen
+              name="Home"
+              component={MainTabNavigator}
+              options={{ headerShown: false }}
+            />
+
+            <Stack.Screen
+              name="Chat"
+              component={ChatScreen}
+              options={{ headerShown: true }}
+            />
+          </>
         )}
       </Stack.Navigator>
     </NavigationContainer>

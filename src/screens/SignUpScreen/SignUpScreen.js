@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
-import SocialSignInButtons from "../../components/SocialSignInButtons";
+
 import { useNavigation } from "@react-navigation/core";
 import { useForm, Controller, watch } from "react-hook-form";
 
@@ -40,7 +40,7 @@ const SignUpScreen = () => {
           control={control}
           placeholder="Username"
           rules={{
-            require: "Username is required",
+            required: "Username is required",
             minLength: {
               value: 3,
               message: "Username should be at least 3 characters long",
@@ -56,7 +56,7 @@ const SignUpScreen = () => {
           control={control}
           placeholder="Email"
           rules={{
-            require: "Username is required",
+            required: "Username is required",
             pattern: { value: EMAIL_REGEX, message: "Email is invalid" },
           }}
         />
@@ -66,7 +66,7 @@ const SignUpScreen = () => {
           placeholder="Password"
           secureTextEntry
           rules={{
-            require: "Password is required",
+            required: "Password is required",
             minLength: {
               value: 8,
               message: "Password should be at least 8 characters long",
@@ -98,8 +98,6 @@ const SignUpScreen = () => {
             Privacy Policy
           </Text>
         </Text>
-
-        <SocialSignInButtons />
 
         <CustomButton
           text="Have an account? Sign in"
