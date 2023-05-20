@@ -87,6 +87,7 @@ export default function OnboardingNameScreen({ navigation }) {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
+                autoCapitalize={"none"}
                 style={styles.input}
                 placeholder="Your name"
                 onBlur={onBlur}

@@ -5,17 +5,36 @@ import CustomButton from "../../components/CustomButton";
 
 import { useNavigation } from "@react-navigation/core";
 import { useForm, Controller, watch } from "react-hook-form";
+import { Auth } from "aws-amplify";
 
 const EMAIL_REGEX =
   /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
 const SignUpScreen = () => {
+  const [loading, setLoading] = useState(false);
   const { control, handleSubmit, watch } = useForm();
   const pwd = watch("password");
   const navigation = useNavigation();
 
-  const onRegisterPressed = () => {
-    navigation.navigate("ConfirmEmail");
+  const onRegisterPressed = async (data) => {
+    if (loading) {
+      return;
+    }
+    setLoading(true);
+    try {
+      const { user } = await Auth.signUp({
+        username: data.email,
+        password: data.password,
+        autoSignIn: { enabled: true },
+      });
+      // validate user
+      // navigation.navigate("Home");
+      console.log(user);
+      navigation.navigate("ConfirmEmail", { username: data.email }); // username = email
+    } catch (e) {
+      console.log("Ooops!(SignUp)", e.message);
+    }
+    setLoading(false);
   };
 
   const onSignInPress = () => {
@@ -35,7 +54,7 @@ const SignUpScreen = () => {
       <View style={styles.root}>
         <Text style={styles.title}>Create an account</Text>
 
-        <CustomInput
+        {/* <CustomInput
           name="username"
           control={control}
           placeholder="Username"
@@ -50,13 +69,13 @@ const SignUpScreen = () => {
               message: "Username should be max 24 characters long",
             },
           }}
-        />
+        /> */}
         <CustomInput
           name="email"
           control={control}
           placeholder="Email"
           rules={{
-            required: "Username is required",
+            required: "Email is required",
             pattern: { value: EMAIL_REGEX, message: "Email is invalid" },
           }}
         />
@@ -84,7 +103,7 @@ const SignUpScreen = () => {
         />
 
         <CustomButton
-          text="Register"
+          text={loading ? "Loading" : "Register"}
           onPress={handleSubmit(onRegisterPressed)}
         />
 

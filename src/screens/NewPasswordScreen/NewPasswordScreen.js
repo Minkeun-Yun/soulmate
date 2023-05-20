@@ -4,18 +4,33 @@ import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
 // import SocialSignInButtons from "../../components/SocialSignInButtons";
 import { useNavigation } from "@react-navigation/native";
-import { useForm, Controller, watch } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { Auth } from "aws-amplify";
+import { useRoute } from "@react-navigation/native";
 
 const NewPasswordScreen = () => {
+  const route = useRoute();
+  const { username } = route.params || {};
   // const [code, setCode] = useState('');
   // const [newPassword, setNewPassword] = useState('');
   const { control, handleSubmit, watch } = useForm();
 
   const navigation = useNavigation();
 
-  const onSubmitPressed = () => {
+  const onSubmitPressed = async (data) => {
     console.log("submitted!");
-    navigation.navigate("SignIn");
+    try {
+      const response = await Auth.forgotPasswordSubmit(
+        username,
+        data.code,
+        data.password
+      );
+      console.log("resend respose : ", response);
+      navigation.navigate("SignIn");
+    } catch (e) {
+      console.log("newPasswordSecreen.js : ", e.message);
+    }
+
     //go to loggin? or signin?
   };
 

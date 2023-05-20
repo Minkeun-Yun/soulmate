@@ -11,6 +11,8 @@ import { listRecommends } from "./queries";
 import { createRecommend, createUserRecommend } from "../../graphql/mutations";
 import OnboardingNameScreen from "../OnboardingNameScreen";
 import { onCreateRecommend } from "../../graphql/subscriptions";
+import { getUser } from "../../graphql/queries";
+import { createUser } from "../../graphql/mutations";
 
 const StatusScreen = () => {
   // let [forREFRESH, setForREFRESH] = useState(0);
@@ -23,15 +25,52 @@ const StatusScreen = () => {
 
   console.log("StatusScreen ON");
 
+  const syncUser = async () => {
+    //get Auth user
+    const authUser = await Auth.currentAuthenticatedUser({
+      bypassCache: true,
+    });
+    // console.log("authUser : ", authUser);
+    console.log("🚗authUser.attributes.sub : ", authUser.attributes.sub);
+    console.log("🚗authUser.attributes.name??xxx : ", authUser.attributes.name);
+    console.log("🚗authUser.attributes.email : ", authUser.attributes.email);
+    console.log(
+      "🚗authUser.attributes.preferred_username : ",
+      authUser.attributes.preferred_username
+    );
+    console.log("🚗authUser.username : ", authUser.username);
+
+    //query the database using Auth user id(sub)
+    const userData = await API.graphql(
+      graphqlOperation(getUser, { id: authUser.attributes.sub })
+    );
+    // console.log("userData: ", userData);
+
+    if (userData.data.getUser) {
+      console.log("user already exists in DB");
+      return;
+    }
+
+    //if there is no users in db, create one
+    const newUser = {
+      id: authUser.attributes.sub,
+      name: authUser.attributes.email,
+      status: "상태 메세지입니다.알았나요?",
+    };
+    const newUserResponse = await API.graphql(
+      graphqlOperation(createUser, { input: newUser })
+    );
+  };
+
+  useEffect(() => {
+    syncUser();
+  }, []);
+
   const fetchRecommends = async () => {
     const authUser = await Auth.currentAuthenticatedUser();
     setId1(authUser?.attributes?.name);
     setNickname(authUser?.attributes?.preferred_username);
-    console.log("name : ", authUser?.attributes?.name);
-    console.log(
-      "preferred_username : ",
-      authUser?.attributes?.preferred_username
-    );
+
     const response = await API.graphql(
       graphqlOperation(listRecommends, {
         id: authUser?.attributes.sub,
@@ -52,6 +91,13 @@ const StatusScreen = () => {
     setRecommends(sortedRecommends);
     // setRecommends(tempRecommends);
     console.log("all Recommend : ", sortedRecommends);
+    // console.log("authUser : ", authUser);
+    // console.log("name : ", authUser?.attributes?.name);
+    console.log("email : ", authUser?.attributes?.email);
+    // console.log(
+    //   "preferred_username : ",
+    //   authUser?.attributes?.preferred_username
+    // );
 
     // after completion, move in "oneMoreRecommend fn"
     // const tempAllUserList = await API.graphql(graphqlOperation(listUsers));
@@ -151,7 +197,7 @@ const StatusScreen = () => {
 
     //after check recommended User, fix below userId
     // *******
-    const newRecommendUserId = "123";
+    const newRecommendUserId = "2";
 
     await API.graphql(
       graphqlOperation(createUserRecommend, {

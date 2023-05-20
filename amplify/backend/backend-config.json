@@ -34,15 +34,15 @@
         "passwordProtectionSettings": {
           "passwordPolicyCharacters": [
             "REQUIRES_LOWERCASE",
-            "REQUIRES_NUMBERS",
-            "REQUIRES_SYMBOLS",
-            "REQUIRES_UPPERCASE"
+            "REQUIRES_NUMBERS"
           ],
-          "passwordPolicyMinLength": 8
+          "passwordPolicyMinLength": 6
         },
         "signupAttributes": [],
         "socialProviders": [],
-        "usernameAttributes": [],
+        "usernameAttributes": [
+          "EMAIL"
+        ],
         "verificationMechanisms": [
           "EMAIL"
         ]

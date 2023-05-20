@@ -44,7 +44,11 @@ const Navigator = () => {
 
   useEffect(() => {
     const listener = (data) => {
-      if (data.payload.event === "signIn" || data.payload.event === "signOut") {
+      if (
+        data.payload.event === "autoSignIn" ||
+        data.payload.event === "signIn" ||
+        data.payload.event === "signOut"
+      ) {
         checkUser();
       }
     };

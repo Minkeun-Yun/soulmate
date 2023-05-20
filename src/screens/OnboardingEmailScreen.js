@@ -64,6 +64,7 @@ export default function OnboardingEmailScreen() {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
+                autoCapitalize={"none"}
                 style={styles.input}
                 placeholder="Email address"
                 onBlur={onBlur}

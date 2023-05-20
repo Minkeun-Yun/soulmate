@@ -5,25 +5,48 @@ import CustomButton from "../../components/CustomButton";
 import SocialSignInButtons from "../../components/SocialSignInButtons";
 import { useNavigation } from "@react-navigation/core";
 import { useForm, Controller, watch } from "react-hook-form";
+import { Auth } from "aws-amplify";
+import { useRoute } from "@react-navigation/native";
 
 const ConfirmEmailScreen = () => {
+  const route = useRoute();
+  const { username } = route.params || {}; // username = email
+  const [loading, setLoading] = useState(false);
   const { control, handleSubmit, watch } = useForm();
   // const [code, setCode] = useState("");
 
   const navigation = useNavigation();
 
-  const onConfirmPressed = (data) => {
+  const onConfirmPressed = async (data) => {
+    if (loading) {
+      return;
+    }
+    setLoading(true);
     console.warn(data);
 
-    navigation.navigate("Home"); //why is error in console??? ah~! there is no Home page when you're not logged in
+    try {
+      const response = await Auth.confirmSignUp(username, data.code); //username = email
+      console.log("confirm nice  : ", response);
+      navigation.navigate("Home");
+    } catch (e) {
+      console.log("newPasswordSecreen.js : ", e.message);
+    }
+
+    setLoading(false);
   };
 
   const onSignInPress = () => {
     navigation.navigate("SignIn");
   };
 
-  const onResendPress = () => {
+  const onResendPress = async () => {
     console.warn("onResendPress");
+    try {
+      await Auth.resendSignUp(username);
+      console.log("code resent successfully");
+    } catch (err) {
+      console.log("error resending code: ", err);
+    }
   };
 
   return (

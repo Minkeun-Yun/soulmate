@@ -26,6 +26,7 @@ const CustomInput = ({
             ]}
           >
             <TextInput
+              autoCapitalize={"none"}
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}

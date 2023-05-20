@@ -5,15 +5,22 @@ import CustomButton from "../../components/CustomButton";
 import SocialSignInButtons from "../../components/SocialSignInButtons";
 import { useNavigation } from "@react-navigation/core";
 
-import { useForm, Controller, watch } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { Auth } from "aws-amplify";
 const ForgotPasswordScreen = () => {
   // const [username, setUsername] = useState('');
-  const { control, handleSubmit, watch } = useForm();
+  const { control, handleSubmit } = useForm();
 
   const navigation = useNavigation();
 
-  const onSendPressed = () => {
-    navigation.navigate("NewPassword");
+  const onSendPressed = async (data) => {
+    try {
+      const response = await Auth.forgotPassword(data.username);
+      console.log("forgotPwd respose : ", response);
+      navigation.navigate("NewPassword", { username: data.username });
+    } catch (e) {
+      console.log("forgotpasswordScreen.js : ", e.message);
+    }
   };
 
   const onSignInPress = () => {
@@ -28,7 +35,7 @@ const ForgotPasswordScreen = () => {
         <CustomInput
           name="username"
           control={control}
-          placeholder="Username"
+          placeholder="Email"
           rules={{
             required: "Username is required",
             minLength: {

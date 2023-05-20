@@ -35,17 +35,25 @@ const SignInScreen = () => {
       return;
     }
     console.log("data : ", data);
-    // console.log("nname : ", nname);
-    // console.log("watch : ", watch);
 
     setLoading(true);
     try {
-      const response = await Auth.signIn(data.username, data.password);
+      const { user } = await Auth.signIn(data.email, data.password);
       // validate user
-      navigation.navigate("Home");
-      // console.log(response);
+      // navigation.navigate("Home");
+      console.log(user);
     } catch (e) {
-      console.log("oops!!", e.message);
+      console.log("Ooops!(SignIn)", e.message);
+      if (e.message === "User is not confirmed.") {
+        //resend code
+        try {
+          await Auth.resendSignUp(data.email);
+          console.log("code resent successfully");
+          navigation.navigate("ConfirmEmail", { username: data.email }); // username = email
+        } catch (err) {
+          console.log("error resending code: ", err);
+        }
+      }
     }
 
     setLoading(false);
@@ -68,10 +76,10 @@ const SignInScreen = () => {
           resizeMode="contain"
         />
         <CustomInput
-          name="username"
-          placeholder="Username"
+          name="email"
+          placeholder="Email"
           control={control}
-          rules={{ required: "Username is required" }}
+          rules={{ required: "Email is required" }}
         />
         <CustomInput
           name="password"
