@@ -197,7 +197,7 @@ const StatusScreen = () => {
 
     //after check recommended User, fix below userId
     // *******
-    const newRecommendUserId = "2";
+    const newRecommendUserId = "3";
 
     await API.graphql(
       graphqlOperation(createUserRecommend, {
@@ -208,6 +208,7 @@ const StatusScreen = () => {
       })
     );
 
+    fetchRecommends();
     // setForREFRESH(forREFRESH++);
   };
 
