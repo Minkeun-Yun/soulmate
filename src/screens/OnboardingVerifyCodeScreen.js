@@ -23,9 +23,9 @@ import { useRoute } from "@react-navigation/native";
 
 export default function OnboardingEmailScreen({ navigation }) {
   const route = useRoute();
-  const { username } = route.params || {};
+  const infoSet = route.params;
 
-  console.log("param.username", username, "received!");
+  console.log("infoSet : ", infoSet, "received!");
 
   useEffect(() => {
     console.log("verify code Screen");
@@ -37,12 +37,12 @@ export default function OnboardingEmailScreen({ navigation }) {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      age: "",
+      age: infoSet.age,
     },
   });
 
   const onSubmit = (data) => {
-    console.log(data);
+    console.log("submit : ", { ...infoSet, age: data.age });
     navigation.navigate("Home");
     // navigation.navigate("OnboardingVerifyCodeScreen", {
     //   username: data.name,
@@ -59,7 +59,7 @@ export default function OnboardingEmailScreen({ navigation }) {
       >
         <View>
           <MKBrand></MKBrand>
-          <MKHeading>How old are you? ({username})</MKHeading>
+          <MKHeading>How old are you? ({infoSet.username || ""})</MKHeading>
 
           <Controller
             control={control}

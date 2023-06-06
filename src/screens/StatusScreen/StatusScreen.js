@@ -19,9 +19,8 @@ const StatusScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
   const [recommends, setRecommends] = useState([]);
+  const [userDataState, setUserDataState] = useState({});
   const [loading, setLoading] = useState(false);
-  const [nickname, setNickname] = useState(null);
-  const [id1, setId1] = useState(null);
 
   console.log("StatusScreen ON");
 
@@ -42,12 +41,17 @@ const StatusScreen = () => {
 
     //query the database using Auth user id(sub)
     const userData = await API.graphql(
-      graphqlOperation(getUser, { id: authUser.attributes.sub })
+      graphqlOperation(getUser, { id: authUser?.attributes?.sub })
     );
     // console.log("userData: ", userData);
 
-    if (userData.data.getUser) {
+    if (userData?.data?.getUser) {
+      setUserDataState({ ...userData?.data?.getUser });
+      console.log("A : ", userData.data?.getUser);
       console.log("user already exists in DB");
+
+      // console.log("userData : ", userData.data.getUserklklklkldkldfkldlksd);
+
       return;
     }
 
@@ -68,12 +72,10 @@ const StatusScreen = () => {
 
   const fetchRecommends = async () => {
     const authUser = await Auth.currentAuthenticatedUser();
-    setId1(authUser?.attributes?.name);
-    setNickname(authUser?.attributes?.preferred_username);
 
     const response = await API.graphql(
       graphqlOperation(listRecommends, {
-        id: authUser?.attributes.sub,
+        id: authUser?.attributes?.sub,
       })
     );
 
@@ -189,7 +191,7 @@ const StatusScreen = () => {
     await API.graphql(
       graphqlOperation(createUserRecommend, {
         input: {
-          userId: authUser.attributes.sub,
+          userId: authUser?.attributes?.sub,
           recommendId: newRecommend.id,
         },
       })
@@ -197,7 +199,7 @@ const StatusScreen = () => {
 
     //after check recommended User, fix below userId
     // *******
-    const newRecommendUserId = "3";
+    const newRecommendUserId = "2";
 
     await API.graphql(
       graphqlOperation(createUserRecommend, {
@@ -214,6 +216,10 @@ const StatusScreen = () => {
 
   return (
     <>
+      <Text>name : {userDataState?.name}</Text>
+      <Text>age : {userDataState?.age}</Text>
+      <Text>status : {userDataState?.status}</Text>
+
       <FlatList
         data={recommends}
         renderItem={({ item }) => (

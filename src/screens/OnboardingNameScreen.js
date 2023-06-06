@@ -16,6 +16,9 @@ import { useForm, Controller } from "react-hook-form";
 
 export default function OnboardingNameScreen({ navigation }) {
   const route = useRoute();
+  const infoSet = {};
+  console.log("te : ", infoSet.username);
+  console.log("te : ", infoSet.age);
   // const navigation = useNavigation();
 
   useEffect(() => {
@@ -35,12 +38,16 @@ export default function OnboardingNameScreen({ navigation }) {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      name: "",
+      username: infoSet.username,
     },
   });
+
   const onSubmit = (data) => {
     console.log(data);
-    navigation.navigate("OnboardingVerifyCodeScreen", { username: data.name });
+    navigation.navigate("OnboardingVerifyCodeScreen", {
+      ...infoSet,
+      username: data.username,
+    });
     // navigation.navigate("OnboardingVerifyCodeScreen");
   };
 
@@ -96,7 +103,7 @@ export default function OnboardingNameScreen({ navigation }) {
                 placeholderTextColor="slategray"
               />
             )}
-            name="name"
+            name="username"
           />
         </View>
 

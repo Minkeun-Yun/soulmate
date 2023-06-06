@@ -83,6 +83,7 @@ const Navigator = () => {
           <>
             {/* <Stack.Screen name="Home" component={HomeScreen} /> */}
 
+            {/* Check if there is a basic info of the user and Load it */}
             <Stack.Screen
               name="OnboardingNameScreen"
               component={OnboardingNameScreen}
