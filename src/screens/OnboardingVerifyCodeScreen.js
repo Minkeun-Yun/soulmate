@@ -24,6 +24,9 @@ import { useRoute } from "@react-navigation/native";
 export default function OnboardingEmailScreen({ navigation }) {
   const route = useRoute();
   const infoSet = route.params;
+  const [isEmpty, setIsEmpty] = useState(
+    infoSet.username === "" ? true : false
+  );
 
   console.log("infoSet : ", infoSet, "received!");
 
@@ -71,7 +74,14 @@ export default function OnboardingEmailScreen({ navigation }) {
                 style={styles.input}
                 placeholder="Enter your age"
                 onBlur={onBlur}
-                onChangeText={onChange}
+                onChangeText={(e) => {
+                  onChange(e);
+                  if (e === "") {
+                    setIsEmpty(true);
+                  } else {
+                    setIsEmpty(false);
+                  }
+                }}
                 value={value}
                 placeholderTextColor="slategray"
                 autoFocus
@@ -82,7 +92,14 @@ export default function OnboardingEmailScreen({ navigation }) {
         </View>
         <View>
           <MKHelpText>Enter verifycode from email.</MKHelpText>
-          <Pressable style={styles.button} onPress={handleSubmit(onSubmit)}>
+          <Pressable
+            style={[
+              styles.button,
+              isEmpty ? styles.emptyButton : styles.button,
+            ]}
+            onPress={handleSubmit(onSubmit)}
+            disabled={isEmpty}
+          >
             <Text style={styles.text}>Continue</Text>
           </Pressable>
         </View>
@@ -104,6 +121,16 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     // elevation: 3,
     backgroundColor: "white",
+  },
+
+  emptyButton: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    // paddingHorizontal: 32,
+    borderRadius: 50,
+    // elevation: 3,
+    backgroundColor: "gray",
   },
   text: {
     fontSize: 20,

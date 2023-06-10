@@ -16,9 +16,11 @@ import { useForm, Controller } from "react-hook-form";
 
 export default function OnboardingNameScreen({ navigation }) {
   const route = useRoute();
-  const infoSet = {};
-  console.log("te : ", infoSet.username);
-  console.log("te : ", infoSet.age);
+  const infoSet = { username: "", age: "" };
+
+  const [isEmpty, setIsEmpty] = useState(
+    infoSet.username === "" ? true : false
+  );
   // const navigation = useNavigation();
 
   useEffect(() => {
@@ -98,7 +100,14 @@ export default function OnboardingNameScreen({ navigation }) {
                 style={styles.input}
                 placeholder="Your name"
                 onBlur={onBlur}
-                onChangeText={onChange}
+                onChangeText={(e) => {
+                  onChange(e);
+                  if (e === "") {
+                    setIsEmpty(true);
+                  } else {
+                    setIsEmpty(false);
+                  }
+                }}
                 value={value}
                 placeholderTextColor="slategray"
               />
@@ -140,7 +149,14 @@ export default function OnboardingNameScreen({ navigation }) {
           name="lastName"
         /> */}
         <View>
-          <Pressable style={styles.button} onPress={handleSubmit(onSubmit)}>
+          <Pressable
+            style={[
+              styles.button,
+              isEmpty ? styles.emptyButton : styles.button,
+            ]}
+            onPress={handleSubmit(onSubmit)}
+            disabled={isEmpty}
+          >
             <Text style={styles.text}>Continue</Text>
           </Pressable>
         </View>
@@ -159,6 +175,17 @@ const styles = StyleSheet.create({
     // elevation: 3,
     backgroundColor: "white",
   },
+
+  emptyButton: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    // paddingHorizontal: 32,
+    borderRadius: 50,
+    // elevation: 3,
+    backgroundColor: "gray",
+  },
+
   text: {
     fontSize: 20,
     // lineHeight: 21,

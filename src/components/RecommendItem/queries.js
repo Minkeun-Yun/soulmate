@@ -38,3 +38,23 @@ export const getRecommend = /* GraphQL */ `
     }
   }
 `;
+
+export const getUser = /* GraphQL */ `
+  query GetUser($id: ID!) {
+    getUser(id: $id) {
+      ChatRooms {
+        items {
+          chatRoom {
+            users {
+              items {
+                user {
+                  id
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;

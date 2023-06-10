@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { createChatRoom, createUserChatRoom } from "../../graphql/mutations";
 import { getRecommend } from "./queries";
+import { getUser } from "./queries";
 import { createReplyYes } from "../../graphql/mutations";
 import { API, graphqlOperation, Auth } from "aws-amplify";
 
@@ -22,10 +23,11 @@ const RecommendItem = ({ recommendId }) => {
 
   // const recommendedUser = { ...tempRecommended?.user };
 
-  useEffect(() => {
-    const forEffect = async () => {
-      const authUser = await Auth.currentAuthenticatedUser();
-      // console.log("re ID : ", recommendId);
+  const loadDB = async () => {
+    const authUser = await Auth.currentAuthenticatedUser();
+    // console.log("re ID : ", recommendId);
+
+    try {
       const recommendData = await API.graphql(
         graphqlOperation(getRecommend, { id: recommendId })
       );
@@ -43,11 +45,16 @@ const RecommendItem = ({ recommendId }) => {
         (item) => item.user?.id !== authUser.attributes?.sub
       );
       setRecommendedUser({ ...tempRecommendedUser });
-    };
-    forEffect();
-  }, [recommendId]);
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
 
   useEffect(() => {
+    loadDB();
+  }, [recommendId]);
+
+  const yesSetting = () => {
     const yes1 = recommend.ReplyYes?.items.some((e) => e.userID === authUserId);
 
     const yes2 = recommend.ReplyYes?.items.some(
@@ -55,20 +62,11 @@ const RecommendItem = ({ recommendId }) => {
     );
     setMyYes(yes1);
     setYourYes(yes2);
+  };
+
+  useEffect(() => {
+    yesSetting();
   }, [recommend, recommendedUser, authUserId]);
-
-  // console.log("recommend :", recommend);
-  // console.log("authUserId :", authUserId);
-
-  // const navigation = useNavigation();
-
-  // set one recommendedUserData from two users data
-
-  // console.log("recommendId :", recommendId);
-  // console.log("myYES : ", myYes);
-  // console.log("yourYES : ", yourYes);
-
-  // console.log("rrrrr : ", recommend.ReplyYes.items[0]);
 
   const isRecent = (past) => {
     const diffTime =
@@ -76,6 +74,7 @@ const RecommendItem = ({ recommendId }) => {
       new Date(past).getTime() / (1000 * 60 * 60 * 24);
     // console.log("Diff : ", diffTime);
     if (diffTime < 0.5) {
+      //"최근!"
       return true;
     }
     return false;
@@ -93,71 +92,146 @@ const RecommendItem = ({ recommendId }) => {
 
   //make the button to add ReplyYes
   const onYesPress = async () => {
-    if (myYes) {
-      console.log("already sending ReplyYes to ", recommendedUser.user?.name);
+    let isMyYes = false;
+    let isYourYes = false;
+
+    //check if there is a myYes already.
+    try {
+      const recommendData = await API.graphql(
+        graphqlOperation(getRecommend, { id: recommendId })
+      );
+      // console.log(recommendData.data.getRecommend.ReplyYes.items);
+      isMyYes = recommendData.data.getRecommend.ReplyYes.items.some(
+        (e) => e.userID === authUserId
+      );
+    } catch (e) {
+      console.log(e.message);
+    }
+
+    //if have myYes already, stop here
+    if (isMyYes) {
+      console.log("Already senading ReplyYes to ", recommendedUser.user?.name);
       return;
     }
-    setMyYes(true);
 
-    const inputReplyYes = {
-      recommendID: recommendId,
-      userID: authUserId,
-    };
+    //if there is no myYes
+    //make new myYes
+    try {
+      const inputReplyYes = {
+        recommendID: recommendId,
+        userID: authUserId,
+      };
+      await API.graphql(
+        graphqlOperation(createReplyYes, { input: inputReplyYes })
+      );
+      console.log(
+        "generate replyYes From ",
+        authUserId,
+        ", sending replyYes to ",
+        recommendedUser.user?.name
+      );
+      setMyYes(true);
+      isMyYes = true;
+    } catch (e) {
+      console.warn("sendYes error : ", e.message);
+    }
 
-    await API.graphql(
-      graphqlOperation(createReplyYes, { input: inputReplyYes })
-    );
-    console.log(
-      "generate replyYes From ",
-      authUserId,
-      ", sending replyYes to ",
-      recommendedUser.user?.name
-    );
+    //check if there is a yourYes again
+    try {
+      const recommendData = await API.graphql(
+        graphqlOperation(getRecommend, { id: recommendId })
+      );
+      // console.log(recommendData.data.getRecommend.ReplyYes.items);
+      isYourYes = recommendData.data.getRecommend.ReplyYes.items.some(
+        (e) => e.userID === recommendedUser?.user?.id
+      );
+      console.log("isyouryes : ", isYourYes);
+    } catch (e) {
+      console.log(e.message);
+    }
 
-    //if they send Yes each other(partner has sent already Yes), make a new chatroom.
+    console.log("myYes : ", myYes, " yourYes : ", yourYes);
+
+    if (isMyYes && isYourYes) {
+      onMakeChatRoom();
+      return;
+    }
   };
 
   const onMakeChatRoom = async () => {
+    //check in realtime..
+    //채팅룸 정보를 모두 읽어와서.. 이미 채팅룸이 있는지 확인후,, 없으면 만든다.
+    let isPrevChatroom = false;
+    try {
+      const getUserData = await API.graphql(
+        graphqlOperation(getUser, { id: authUserId })
+      );
+      const myChatRooms = getUserData?.data?.getUser?.ChatRooms?.items || [];
+
+      myChatRooms.forEach((chatroom) => {
+        // console.log("AA : ", chatroom.chatRoom.users.items);
+        const check1 = chatroom.chatRoom?.users?.items.some(
+          (e) => e.user?.id === recommendedUser?.user?.id
+        );
+        const check2 = chatroom.chatRoom.users.items.some(
+          (e) => e.user?.id === authUserId
+        );
+
+        if (check1 && check2) {
+          isPrevChatroom = true;
+          console.warn("You have already chatroom with him.");
+          return;
+        }
+      });
+    } catch (e) {
+      console.log(e.message);
+    }
+    console.log("채팅창만들기 Pressed!before");
+    if (isPrevChatroom) return;
+
     console.log("채팅창만들기 Pressed!");
 
-    //
-    const newChatRoomData = await API.graphql(
-      graphqlOperation(createChatRoom, { input: {} })
-    );
+    // check 이미 있는지...이거 미리 체크해서 아예 버튼을 없애는 것도!.
 
-    console.log("newChatRoomData : ", newChatRoomData);
+    try {
+      const newChatRoomData = await API.graphql(
+        graphqlOperation(createChatRoom, { input: {} })
+      );
 
-    if (!newChatRoomData.data?.createChatRoom) {
-      console.log("Error. creating the new chatRoom");
+      console.log("newChatRoomData : ", newChatRoomData);
+
+      const newChatRoom = newChatRoomData.data?.createChatRoom;
+
+      await API.graphql(
+        graphqlOperation(createUserChatRoom, {
+          input: {
+            chatRoomId: newChatRoom.id,
+            userId: recommendedUser.user?.id,
+          },
+        })
+      );
+
+      await API.graphql(
+        graphqlOperation(createUserChatRoom, {
+          input: { chatRoomId: newChatRoom.id, userId: authUserId },
+        })
+      );
+
+      navigation.navigate("Chat", {
+        id: newChatRoom.id,
+        name: recommendedUser.user?.name,
+      });
+    } catch (e) {
+      if (!newChatRoomData.data?.createChatRoom) {
+        console.log("Error. creating the new chatRoom");
+      }
+      console.log(e.message);
     }
 
-    const newChatRoom = newChatRoomData.data?.createChatRoom;
-
-    //
-    await API.graphql(
-      graphqlOperation(createUserChatRoom, {
-        input: { chatRoomId: newChatRoom.id, userId: recommendedUser.user?.id },
-      })
-    );
-
-    //
-
-    await API.graphql(
-      graphqlOperation(createUserChatRoom, {
-        input: { chatRoomId: newChatRoom.id, userId: authUserId },
-      })
-    );
-
-    //
-    navigation.navigate("Chat", {
-      id: newChatRoom.id,
-      name: recommendedUser.user?.name,
-    });
-
-    navigation.navigate("Chat", {
-      id: newChatRoom.id,
-      name: recommendedUser.user?.name,
-    });
+    // navigation.navigate("Chat", {
+    //   id: newChatRoom.id,
+    //   name: recommendedUser.user?.name,
+    // });
   };
 
   return (

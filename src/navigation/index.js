@@ -3,7 +3,7 @@ import { ActivityIndicator, View } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createStackNavigator } from "@react-navigation/stack";
+// import { createStackNavigator } from "@react-navigation/stack";
 
 import OnboardingNameScreen from "../screens/OnboardingNameScreen";
 // import OnboardingEmailScreen from "../screens/OnboardingEmailScreen";
@@ -54,7 +54,9 @@ const Navigator = () => {
     };
     const result = Hub.listen("auth", listener);
     // result.Hub.
-    return () => Hub.remove("auth", listener);
+    console.log("hub : ", result);
+    // return () => Hub.remove("auth", listener);
+    return () => result();
   }, []);
 
   if (user === undefined) {
