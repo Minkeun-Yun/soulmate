@@ -473,6 +473,7 @@ export const createUser = /* GraphQL */ `
         nextToken
         startedAt
       }
+      profileImages
       createdAt
       updatedAt
       _version
@@ -551,6 +552,7 @@ export const updateUser = /* GraphQL */ `
         nextToken
         startedAt
       }
+      profileImages
       createdAt
       updatedAt
       _version
@@ -629,6 +631,7 @@ export const deleteUser = /* GraphQL */ `
         nextToken
         startedAt
       }
+      profileImages
       createdAt
       updatedAt
       _version
@@ -686,6 +689,7 @@ export const createUserRecommend = /* GraphQL */ `
           nextToken
           startedAt
         }
+        profileImages
         createdAt
         updatedAt
         _version
@@ -749,6 +753,7 @@ export const updateUserRecommend = /* GraphQL */ `
           nextToken
           startedAt
         }
+        profileImages
         createdAt
         updatedAt
         _version
@@ -812,6 +817,7 @@ export const deleteUserRecommend = /* GraphQL */ `
           nextToken
           startedAt
         }
+        profileImages
         createdAt
         updatedAt
         _version
@@ -887,6 +893,7 @@ export const createUserChatRoom = /* GraphQL */ `
           nextToken
           startedAt
         }
+        profileImages
         createdAt
         updatedAt
         _version
@@ -962,6 +969,7 @@ export const updateUserChatRoom = /* GraphQL */ `
           nextToken
           startedAt
         }
+        profileImages
         createdAt
         updatedAt
         _version
@@ -1037,6 +1045,7 @@ export const deleteUserChatRoom = /* GraphQL */ `
           nextToken
           startedAt
         }
+        profileImages
         createdAt
         updatedAt
         _version

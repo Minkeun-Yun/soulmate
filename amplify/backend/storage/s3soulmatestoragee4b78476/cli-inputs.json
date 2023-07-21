@@ -1,0 +1,12 @@
+{
+  "resourceName": "s3soulmatestoragee4b78476",
+  "bucketName": "soulmate-storage-e4b78476",
+  "policyUUID": "5c5fc7b8",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ]
+}

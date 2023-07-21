@@ -37,10 +37,10 @@ const RecommendItem = ({ recommendId }) => {
 
       const tempRecommendedUserSet =
         recommendData.data?.getRecommend?.users?.items;
-      console.log(
-        "ReData(users) : ",
-        recommendData.data?.getRecommend?.users?.items
-      );
+      // console.log(
+      //   "ReData(users) : ",
+      //   recommendData.data?.getRecommend?.users?.items
+      // );
       const tempRecommendedUser = tempRecommendedUserSet.find(
         (item) => item.user?.id !== authUser.attributes?.sub
       );
@@ -95,7 +95,7 @@ const RecommendItem = ({ recommendId }) => {
     let isMyYes = false;
     let isYourYes = false;
 
-    //check if there is a myYes already.
+    //check if there is a myYes.
     try {
       const recommendData = await API.graphql(
         graphqlOperation(getRecommend, { id: recommendId })
@@ -110,11 +110,11 @@ const RecommendItem = ({ recommendId }) => {
 
     //if have myYes already, stop here
     if (isMyYes) {
-      console.log("Already senading ReplyYes to ", recommendedUser.user?.name);
+      console.log("Already sending ReplyYes to ", recommendedUser.user?.name);
       return;
     }
 
-    //if there is no myYes
+    //if there is no MyYes
     //make new myYes
     try {
       const inputReplyYes = {
@@ -186,9 +186,8 @@ const RecommendItem = ({ recommendId }) => {
     } catch (e) {
       console.log(e.message);
     }
-    console.log("채팅창만들기 Pressed!before");
-    if (isPrevChatroom) return;
 
+    if (isPrevChatroom) return;
     console.log("채팅창만들기 Pressed!");
 
     // check 이미 있는지...이거 미리 체크해서 아예 버튼을 없애는 것도!.
@@ -198,7 +197,7 @@ const RecommendItem = ({ recommendId }) => {
         graphqlOperation(createChatRoom, { input: {} })
       );
 
-      console.log("newChatRoomData : ", newChatRoomData);
+      // console.log("newChatRoomData : ", newChatRoomData);
 
       const newChatRoom = newChatRoomData.data?.createChatRoom;
 

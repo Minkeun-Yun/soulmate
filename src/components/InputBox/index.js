@@ -1,13 +1,18 @@
 import { useState } from "react";
-import { View, StyleSheet, TextInput } from "react-native";
+import { View, StyleSheet, TextInput, Image } from "react-native";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { API, graphqlOperation, Auth } from "aws-amplify";
+import { API, graphqlOperation, Auth, Storage } from "aws-amplify";
 import { createMessage, updateChatRoom } from "../../graphql/mutations";
 import { getChatRoom } from "../../graphql/queries";
+import * as ImagePicker from "expo-image-picker";
+
+import "react-native-get-random-values";
+import { v4 as uuidv4 } from "uuid";
 
 const InputBox = ({ chatRoom }) => {
   const [text, setText] = useState("");
+  const [image, setImage] = useState(null);
 
   const onSend = async () => {
     // console.warn("Sending a new message: ", text);
@@ -24,6 +29,9 @@ const InputBox = ({ chatRoom }) => {
     const newMessageData = await API.graphql(
       graphqlOperation(createMessage, { input: newMessageInput })
     );
+
+    await uploadFile(image);
+    setImage(null);
 
     setText("");
 
@@ -44,28 +52,71 @@ const InputBox = ({ chatRoom }) => {
     );
   };
 
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+    });
+    console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
+  const uploadFile = async (fileUri) => {
+    try {
+      const response = await fetch(fileUri);
+      const blob = await response.blob();
+      const key = `${uuidv4()}.png`;
+      await Storage.put(key, blob, {
+        contentType: "image/png",
+      });
+      return key;
+    } catch (err) {
+      console.log("Error uploading file:", err);
+    }
+  };
+
   return (
-    <SafeAreaView edges={["bottom"]} style={styles.container}>
-      {/* Icon */}
-      <AntDesign name="plus" size={20} color="royalblue" />
+    <>
+      {image && (
+        <View>
+          <Image
+            style={styles.seletedImage}
+            source={{ uri: image }}
+            resizeMode="contain"
+          />
+        </View>
+      )}
 
-      {/* Text Input */}
-      <TextInput
-        value={text}
-        onChangeText={setText}
-        style={styles.input}
-        placeholder="type your message..."
-      />
+      <SafeAreaView edges={["bottom"]} style={styles.container}>
+        {/* Icon */}
+        <AntDesign
+          onPress={pickImage}
+          name="plus"
+          size={20}
+          color="royalblue"
+        />
 
-      {/* Icon */}
-      <MaterialIcons
-        onPress={onSend}
-        style={styles.send}
-        name="send"
-        size={16}
-        color="white"
-      />
-    </SafeAreaView>
+        {/* Text Input */}
+        <TextInput
+          value={text}
+          onChangeText={setText}
+          style={styles.input}
+          placeholder="type your message..."
+        />
+
+        {/* Icon */}
+        <MaterialIcons
+          onPress={onSend}
+          style={styles.send}
+          name="send"
+          size={16}
+          color="white"
+        />
+      </SafeAreaView>
+    </>
   );
 };
 
@@ -94,6 +145,21 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     overflow: "hidden",
   },
+
+  // attachmentsContainer: {
+  //   alignItems: "flex-end",
+  // },
+  seletedImage: {
+    height: 100,
+    width: 200,
+  },
+  // removeSelectedImage: {
+  //   position: "absolute",
+  //   right: 10,
+  //   backgroundColor: "white",
+  //   borderRadius: 10,
+  //   overflow: "hidden",
+  // },
 });
 
 export default InputBox;

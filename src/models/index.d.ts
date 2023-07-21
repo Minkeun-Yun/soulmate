@@ -148,6 +148,7 @@ type EagerUser = {
   readonly ChatRooms?: (UserChatRoom | null)[] | null;
   readonly Recommends?: (UserRecommend | null)[] | null;
   readonly ReplyYes?: (ReplyYes | null)[] | null;
+  readonly profileImages?: (string | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -168,6 +169,7 @@ type LazyUser = {
   readonly ChatRooms: AsyncCollection<UserChatRoom>;
   readonly Recommends: AsyncCollection<UserRecommend>;
   readonly ReplyYes: AsyncCollection<ReplyYes>;
+  readonly profileImages?: (string | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

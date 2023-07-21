@@ -139,10 +139,6 @@ export const getRecommend = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
-          user {
-            id
-            age
-          }
         }
         nextToken
         startedAt
@@ -566,6 +562,7 @@ export const getUser = /* GraphQL */ `
         nextToken
         startedAt
       }
+      profileImages
       createdAt
       updatedAt
       _version
@@ -605,6 +602,7 @@ export const listUsers = /* GraphQL */ `
           nextToken
           startedAt
         }
+        profileImages
         createdAt
         updatedAt
         _version
@@ -653,6 +651,7 @@ export const syncUsers = /* GraphQL */ `
           nextToken
           startedAt
         }
+        profileImages
         createdAt
         updatedAt
         _version
@@ -710,6 +709,7 @@ export const getUserRecommend = /* GraphQL */ `
           nextToken
           startedAt
         }
+        profileImages
         createdAt
         updatedAt
         _version
@@ -751,6 +751,7 @@ export const listUserRecommends = /* GraphQL */ `
           age
           heartto
           heartfrom
+          profileImages
           createdAt
           updatedAt
           _version
@@ -801,6 +802,7 @@ export const syncUserRecommends = /* GraphQL */ `
           age
           heartto
           heartfrom
+          profileImages
           createdAt
           updatedAt
           _version
@@ -853,6 +855,7 @@ export const userRecommendsByRecommendId = /* GraphQL */ `
           age
           heartto
           heartfrom
+          profileImages
           createdAt
           updatedAt
           _version
@@ -905,6 +908,7 @@ export const userRecommendsByUserId = /* GraphQL */ `
           age
           heartto
           heartfrom
+          profileImages
           createdAt
           updatedAt
           _version
@@ -980,6 +984,7 @@ export const getUserChatRoom = /* GraphQL */ `
           nextToken
           startedAt
         }
+        profileImages
         createdAt
         updatedAt
         _version
@@ -1022,6 +1027,7 @@ export const listUserChatRooms = /* GraphQL */ `
           age
           heartto
           heartfrom
+          profileImages
           createdAt
           updatedAt
           _version
@@ -1073,6 +1079,7 @@ export const syncUserChatRooms = /* GraphQL */ `
           age
           heartto
           heartfrom
+          profileImages
           createdAt
           updatedAt
           _version
@@ -1126,6 +1133,7 @@ export const userChatRoomsByChatRoomId = /* GraphQL */ `
           age
           heartto
           heartfrom
+          profileImages
           createdAt
           updatedAt
           _version
@@ -1179,6 +1187,7 @@ export const userChatRoomsByUserId = /* GraphQL */ `
           age
           heartto
           heartfrom
+          profileImages
           createdAt
           updatedAt
           _version

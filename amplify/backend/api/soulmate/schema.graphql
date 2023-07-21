@@ -36,4 +36,5 @@ type User @model @auth(rules: [{allow: public}]) {
   ChatRooms: [ChatRoom] @manyToMany(relationName: "UserChatRoom")
   Recommends: [Recommend] @manyToMany(relationName: "UserRecommend")
   ReplyYes: [ReplyYes] @hasMany(indexName: "byUser", fields: ["id"])
+  profileImages: [String]
 } 

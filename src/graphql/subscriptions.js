@@ -440,6 +440,7 @@ export const onCreateUser = /* GraphQL */ `
         nextToken
         startedAt
       }
+      profileImages
       createdAt
       updatedAt
       _version
@@ -515,6 +516,7 @@ export const onUpdateUser = /* GraphQL */ `
         nextToken
         startedAt
       }
+      profileImages
       createdAt
       updatedAt
       _version
@@ -590,6 +592,7 @@ export const onDeleteUser = /* GraphQL */ `
         nextToken
         startedAt
       }
+      profileImages
       createdAt
       updatedAt
       _version
@@ -646,6 +649,7 @@ export const onCreateUserRecommend = /* GraphQL */ `
           nextToken
           startedAt
         }
+        profileImages
         createdAt
         updatedAt
         _version
@@ -708,6 +712,7 @@ export const onUpdateUserRecommend = /* GraphQL */ `
           nextToken
           startedAt
         }
+        profileImages
         createdAt
         updatedAt
         _version
@@ -770,6 +775,7 @@ export const onDeleteUserRecommend = /* GraphQL */ `
           nextToken
           startedAt
         }
+        profileImages
         createdAt
         updatedAt
         _version
@@ -844,6 +850,7 @@ export const onCreateUserChatRoom = /* GraphQL */ `
           nextToken
           startedAt
         }
+        profileImages
         createdAt
         updatedAt
         _version
@@ -918,6 +925,7 @@ export const onUpdateUserChatRoom = /* GraphQL */ `
           nextToken
           startedAt
         }
+        profileImages
         createdAt
         updatedAt
         _version
@@ -992,6 +1000,7 @@ export const onDeleteUserChatRoom = /* GraphQL */ `
           nextToken
           startedAt
         }
+        profileImages
         createdAt
         updatedAt
         _version
