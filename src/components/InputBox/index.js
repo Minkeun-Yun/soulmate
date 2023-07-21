@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { API, graphqlOperation, Auth, Storage } from "aws-amplify";
 import { createMessage, updateChatRoom } from "../../graphql/mutations";
 import { getChatRoom } from "../../graphql/queries";
+
 import * as ImagePicker from "expo-image-picker";
 
 import "react-native-get-random-values";
@@ -158,7 +159,7 @@ const styles = StyleSheet.create({
   //   right: 10,
   //   backgroundColor: "white",
   //   borderRadius: 10,
-  //   overflow: "hidden",
+  //   overflow: "hidden ",
   // },
 });
 
